@@ -87,9 +87,27 @@
         <div class="grid"></div>
 
         <div class="content">   
-            <div class="status">AMAZE AMAZE AMAZE</div>
-            <h1>Hello, world!<span class="cursor">&nbsp;</span></h1> 
-            <div class="status">type ENTER to enter</div>
+            <div class="status">Inicializando... AMAZE AMAZE AMAZE</div>
+            <h1>
+                <span class="typed">Hello, world!</span>
+                <span class="cursor">&nbsp;</span>
+            </h1> 
         </div>
+        <script>
+            const status = document.querySelector('.status');
+
+            setTimeout(function () {
+                status.textContent = 'Type ENTER to enter:';
+            }, 3000);
+
+            const typed = document.querySelector('.typed');
+
+            document.addEventListener('keydown',  function (e) {
+                if (e.key === 'Backspace') {
+                    e.preventDefault();
+                    typed.textContent = typed.textContent.slice(0, -1);
+                }
+            });
+        </script>
     </body>
 </html>
