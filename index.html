@@ -54,6 +54,7 @@
                 margin-bottom: 1rem;
                 opacity: 0;
                 animation: fadeIn 0.6s ease forwards;
+                transition: opacity 0.5s ease;
             }
 
             h1 {
@@ -69,7 +70,11 @@
                 display: inline-block;
                 width: 0.5em;
                 background: var(--accent);
-                margin-left: 0.15em;
+                margin-left: 0em;
+                opacity: 0;
+            }
+
+            .cursor.active {
                 animation: blink 1s step-end infinite;
             }
 
@@ -78,6 +83,7 @@
             }
 
             @keyframes blink {
+                0%, 100% {opacity: 1; }
                 50% { opacity: 0; }
             }
         </style>
@@ -89,18 +95,25 @@
         <div class="content">   
             <div class="status">Inicializando... AMAZE AMAZE AMAZE</div>
             <h1>
-                <span class="typed">Hello, world!</span>
-                <span class="cursor">&nbsp;</span>
+                <span class="typed">Hello, world!</span><span class="cursor">&nbsp;</span>
             </h1> 
         </div>
         <script>
             const status = document.querySelector('.status');
-
-            setTimeout(function () {
-                status.textContent = 'Type ENTER to enter:';
-            }, 3000);
-
             const typed = document.querySelector('.typed');
+            const cursor = document.querySelector('.cursor');
+
+            
+            setTimeout(function () {
+                status.style.animation = 'none';
+                status.style.opacity = 0;
+
+                setTimeout(function () {
+                    status.textContent = 'Type ENTER to enter:';
+                    status.style.opacity = 1;
+                    cursor.classList.add('active');
+                }, 500);
+            }, 3000);
 
             document.addEventListener('keydown',  function (e) {
                 if (e.key === 'Backspace') {
