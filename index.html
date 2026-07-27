@@ -150,7 +150,7 @@
                 ctx.lineWidth = 0.5;
             }
 
-            function drawStringArt(pinSequence) {
+            function drawStringArt(pinSequence, onComplete) {
                 const totalLines = pinSequence.length - 1;
                 const duration = 8000;
                 let startTime = null;
@@ -229,8 +229,13 @@
                     typed.textContent += e.key.toUpperCase();
 
                     if (typed.textContent === 'ENTER') {
-                        typed.textContent = 'YURI';
                         screenTest.classList.add('visible');
+
+                        screenTest.addEventListener('transitioned', function handleFadeIn() {
+                            typed.textContent = 'YURI';
+                            screenTest.removeEventListener('transitioned', handleFadeIn);
+                        });
+                        
                         fetch('pins.txt')
                             .then(function (response) { return response.text(); })
                             .then(function (text) {
