@@ -231,11 +231,11 @@
                     if (typed.textContent === 'ENTER') {
                         screenTest.classList.add('visible');
 
-                        screenTest.addEventListener('transitioned', function handleFadeIn() {
+                        screenTest.addEventListener('transitionend', function handleFadeIn() {
                             typed.textContent = 'YURI';
-                            screenTest.removeEventListener('transitioned', handleFadeIn);
+                            screenTest.removeEventListener('transitionend', handleFadeIn);
                         });
-                        
+
                         fetch('pins.txt')
                             .then(function (response) { return response.text(); })
                             .then(function (text) {
