@@ -178,9 +178,27 @@
 
                     if (t < 1) {
                         requestAnimationFrame(animate);
+                    } else if (onComplete) {
+                        onComplete();
                     }
                 }
                 requestAnimationFrame(animate);
+            }
+
+            function typeText(element, text, callback) {
+                let i = 0;
+
+                function typeNextChar() {
+                    if (i < text.length) {
+                        element.textContent += text[i];
+                        i++;
+                        setTimeout(typeNextChar, 120);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+
+                typeNextChar();
             }
 
             setTimeout(function () {
@@ -211,13 +229,18 @@
                     typed.textContent += e.key.toUpperCase();
 
                     if (typed.textContent === 'ENTER') {
+                        typed.textContent = 'YURI';
                         screenTest.classList.add('visible');
                         fetch('pins.txt')
                             .then(function (response) { return response.text(); })
                             .then(function (text) {
                                 const pinSequence = text.trim().split(',').map(Number);
                                 prepareCanvas();
-                                drawStringArt(pinSequence);
+                                drawStringArt(pinSequence, function () {
+                                    typeText(typed, '_NEMETH', function () {
+                                        console.log('YURI_NEMETH completo - próxima etapa: zoom');
+                                    });
+                                });
                             });
                     }
                 }
