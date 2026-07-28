@@ -159,14 +159,14 @@
             function goHome() {
                 screenTest.classList.add('zoom');
                 
-                screenTest.addEventListener('transitioned', function handleZoomEnd(e) {
+                screenTest.addEventListener('transitionend', function handleZoomEnd(e) {
                     if (e.propertyName !== 'opacity') return;
 
                     screenTest.classList.remove('visible', 'zoom');
                     document.querySelector('.content').style.opacity = 0;
                     home.classList.add('visible');
 
-                    screenTest.removeEventListener('transitioned', handleZoomEnd);
+                    screenTest.removeEventListener('transitionend', handleZoomEnd);
                 });
             }
 
