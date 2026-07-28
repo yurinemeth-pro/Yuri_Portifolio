@@ -179,9 +179,9 @@
             const mobileInput = document.querySelector('.mobile-input');
 
             // ===== Mobile: focar o input escondido no primeiro toque/clique =====
-            document.addEventListener('pointerdown', function focusOnce() {
+            document.addEventListener('click', function focusOnce() {
                 mobileInput.focus();
-                document.removeEventListener('pointerdown', focusOnce);
+                document.removeEventListener('click', focusOnce);
             });
 
             // ===== O que acontece quando "ENTER" é completado =====
