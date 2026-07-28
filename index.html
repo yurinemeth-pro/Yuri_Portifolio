@@ -163,27 +163,27 @@
                 let startTime = null;
                 const maxRadius = Math.hypot(window.innerWidth, window.innerHeight) / 2 * 1.1;
 
-                function animate(currentTime) {
-                    if (startTime === null) startTime = currentTime;
-                    const elapsed = currentTime - startTime;
-                    const t = Math.min(elapsed / duration, 1);
+            function animate(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const elapsed = currentTime - startTime;
+                const t = Math.min(elapsed / duration, 1);
 
-                    const eased = t * t * t;
-                    const radius = eased * maxRadius;
+                const eased = t * t * t;
+                const radius = eased * maxRadius;
 
-                    const mask = 'radial-gradient(circle at 50% 50%, transparent ' + radius + 'px, black ' + radius + 'px)';
-                    screenTest.style.webkitMaskImage = mask;
-                    screenTest.style.maskImage = mask;
+                const mask = 'radial-gradient(circle at 50% 50%, transparent ' + radius + 'px, black ' + radius + 'px)';
+                screenTest.style.webkitMaskImage = mask;
+                screenTest.style.maskImage = mask;
 
-                    content.style.transform = 'scale(' + (1 + eased * 0.15) + ')';
+                content.style.transform = 'scale(' + (1 + eased * 0.15) + ')';
+                content.style.opacity = 1 - eased;
 
-                    if (t < 1) {
-                        requestAnimationFrame(animate);
-                    } else {
-                        screenTest.style.display = 'none';
-                        content.style.display = 'none';
-                    }
+                if (t < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    content.style.display = 'none';
                 }
+            }
 
                 requestAnimationFrame(animate);
             }
