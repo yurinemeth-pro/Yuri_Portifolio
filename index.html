@@ -177,13 +177,15 @@
 
             const mobileInput = document.querySelector('.mobile-input');
 
-            document.addEventListener('click', function focusOnce() {
+            document.addEventListener('pointerdown', function focusOnce() {
                 mobileInput.focus();
-                document.removeEventListener('touchstart', focusOnce);
+                document.removeEventListener('pointerdown', focusOnce);
             });
 
             function goHome() {
                 home.classList.add('visible');
+                content.style.transition = 'none';
+
 
                 const duration = 1400;
                 let startTime = null;
@@ -305,36 +307,25 @@
                     if (typed.textContent === '') {
                     helloErased = true;
                     }
-
-                    return;
                 }
+            });
 
-                if (helloErased && /^[a-zA-Z]$/.test(e.key)) {
-                    typed.textContent += e.key.toUpperCase();
+            mobileInput.addEventListener('input', function () {
+                const value = mobileInput.value;
+                mobileInput.value = '';
+
+                if (!value) return;
+
+                const char = value.slice(-1);
+
+                if (helloErased && /^[a-zA-Z]$/.test(char)) {
+                    typed.textContent += char.toUpperCase();
 
                     if (typed.textContent === 'ENTER') {
-                        status.style.opacity = 0;
-                        screenTest.classList.add('visible');
-
-                        screenTest.addEventListener('transitionend', function handleFadeIn() {
-                            typed.textContent = 'YURI';
-                            screenTest.removeEventListener('transitionend', handleFadeIn);
-                        });
-
-                        fetch('pins.txt')
-                            .then(function (response) { return response.text(); })
-                            .then(function (text) {
-                                const pinSequence = text.trim().split(',').map(Number);
-                                prepareCanvas();
-                                drawStringArt(pinSequence, function () {
-                                    typeText(typed, '_NEMETH', function () {
-                                        setTimeout(goHome, 2000);
-                                    });
-                                });
-                            });
+                        triggerEnter();
                     }
                 }
-            }); 
+            });
         </script>
     </body>
 </html>
