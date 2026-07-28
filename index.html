@@ -46,6 +46,7 @@
                 text-align: center;
                 letter-spacing: 0.15em;
                 transition: opacity 1s ease;
+                transform-origin: 50% 50%;
             }
 
             .status {
@@ -151,6 +152,7 @@
             const totalPins = 400;
 
             const home = document.querySelector('.home');
+            const content = document.querySelector('.content');
 
             function goHome() {
                 home.classList.add('visible');
@@ -171,11 +173,13 @@
                     screenTest.style.webkitMaskImage = mask;
                     screenTest.style.maskImage = mask;
 
+                    content.style.transform = 'scale(' + (1 + eased * 0.15) + ')';
+
                     if (t < 1) {
                         requestAnimationFrame(animate);
                     } else {
                         screenTest.style.display = 'none';
-                        document.querySelector('.content').style.display = 'none';
+                        content.style.display = 'none';
                     }
                 }
 
@@ -295,10 +299,7 @@
                                 prepareCanvas();
                                 drawStringArt(pinSequence, function () {
                                     typeText(typed, '_NEMETH', function () {
-                                        setTimeout(function () {
-                                            document.querySelector('.content').style.opacity = 0;
-                                            goHome();
-                                        }, 2000);
+                                        setTimeout(goHome, 2000);
                                     });
                                 });
                             });
