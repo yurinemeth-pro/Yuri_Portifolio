@@ -162,6 +162,7 @@
 
         </div>
         <script>
+            // ===== Referências aos elementos do HTML =====
             const status = document.querySelector('.status');
             const typed = document.querySelector('.typed');
             const cursor = document.querySelector('.cursor');
@@ -177,45 +178,73 @@
 
             const mobileInput = document.querySelector('.mobile-input');
 
+            // ===== Mobile: focar o input escondido no primeiro toque/clique =====
             document.addEventListener('pointerdown', function focusOnce() {
                 mobileInput.focus();
                 document.removeEventListener('pointerdown', focusOnce);
             });
 
+            // ===== O que acontece quando "ENTER" é completado =====
+            // Isso ESTAVA FALTANDO no seu arquivo — é chamado tanto pelo
+            // desktop (evento 'keydown') quanto pelo mobile (evento 'input'),
+            // por isso vive numa função própria, reaproveitável pelos dois.
+            function triggerEnter() {
+                status.style.opacity = 0;
+                screenTest.classList.add('visible');
+
+                screenTest.addEventListener('transitionend', function handleFadeIn() {
+                    typed.textContent = 'YURI';
+                    screenTest.removeEventListener('transitionend', handleFadeIn);
+                });
+
+                fetch('pins.txt')
+                    .then(function (response) { return response.text(); })
+                    .then(function (text) {
+                        const pinSequence = text.trim().split(',').map(Number);
+                        prepareCanvas();
+                        drawStringArt(pinSequence, function () {
+                            typeText(typed, '_NEMETH', function () {
+                                setTimeout(goHome, 2000);
+                            });
+                        });
+                    });
+            }
+
+            // ===== Transição final: "portal" revelando a home =====
             function goHome() {
                 home.classList.add('visible');
-                content.style.transition = 'none';
-
+                content.style.transition = 'none'; // desliga a transition do CSS, o JS assume o controle do fade
 
                 const duration = 1400;
                 let startTime = null;
                 const maxRadius = Math.hypot(window.innerWidth, window.innerHeight) / 2 * 1.1;
 
-            function animate(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const elapsed = currentTime - startTime;
-                const t = Math.min(elapsed / duration, 1);
+                function animate(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const elapsed = currentTime - startTime;
+                    const t = Math.min(elapsed / duration, 1);
 
-                const eased = t * t * t;
-                const radius = eased * maxRadius;
+                    const eased = t * t * t; // curva acelerada, pro círculo e pro zoom
+                    const radius = eased * maxRadius;
 
-                const mask = 'radial-gradient(circle at 50% 50%, transparent ' + radius + 'px, black ' + radius + 'px)';
-                screenTest.style.webkitMaskImage = mask;
-                screenTest.style.maskImage = mask;
+                    const mask = 'radial-gradient(circle at 50% 50%, transparent ' + radius + 'px, black ' + radius + 'px)';
+                    screenTest.style.webkitMaskImage = mask;
+                    screenTest.style.maskImage = mask;
 
-                content.style.transform = 'scale(' + (1 + eased * 0.15) + ')';
-                content.style.opacity = 1 - t;
+                    content.style.transform = 'scale(' + (1 + eased * 0.15) + ')';
+                    content.style.opacity = 1 - t; // curva LINEAR, só pro fade — mais suave
 
-                if (t < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    content.style.display = 'none';
+                    if (t < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        content.style.display = 'none';
+                    }
                 }
-            }
 
                 requestAnimationFrame(animate);
             }
 
+            // ===== Matemática de posição dos pinos no círculo =====
             function getPinPosition(pinIndex) {
                 const angle = (pinIndex / totalPins) * Math.PI * 2;
                 const centerX = canvas.width / 2;
@@ -235,6 +264,7 @@
                 ctx.lineWidth = 0.5;
             }
 
+            // ===== Animação da string art, com aceleração exponencial =====
             function drawStringArt(pinSequence, onComplete) {
                 const totalLines = pinSequence.length - 1;
                 const duration = 8000;
@@ -270,6 +300,7 @@
                 requestAnimationFrame(animate);
             }
 
+            // ===== Efeito de digitação automática (usado pro "_NEMETH") =====
             function typeText(element, text, callback) {
                 let i = 0;
 
@@ -286,6 +317,7 @@
                 typeNextChar();
             }
 
+            // ===== Troca do subtítulo, 3s após carregar =====
             setTimeout(function () {
                 status.style.animation = 'none';
                 status.style.opacity = 0;
@@ -297,19 +329,21 @@
                 }, 500);
             }, 3000);
 
-            document.addEventListener('keydown',  function (e) {
+            // ===== Teclado físico (desktop): só cuida do Backspace =====
+            document.addEventListener('keydown', function (e) {
                 mobileInput.focus();
-                
+
                 if (e.key === 'Backspace') {
                     e.preventDefault();
                     typed.textContent = typed.textContent.slice(0, -1);
-                    
+
                     if (typed.textContent === '') {
-                    helloErased = true;
+                        helloErased = true;
                     }
                 }
             });
 
+            // ===== Input escondido (funciona em desktop E mobile): cuida das letras =====
             mobileInput.addEventListener('input', function () {
                 const value = mobileInput.value;
                 mobileInput.value = '';
