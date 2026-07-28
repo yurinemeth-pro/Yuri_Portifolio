@@ -93,7 +93,14 @@
             background: var(--accent);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 1s ease;
+            transition: opacity 1s ease, transform 1.2s ease-in;
+            transform: scale(1);
+            transform-origin: 50% 50%;
+            }
+            
+            screen-test.zoom {
+                transform: scale(25);
+                opacity: 0;
             }
 
             .screen-test.visible {
@@ -106,19 +113,35 @@
                 height: 100%;
                 display: block;
             }
+
+            .home {
+                position: fixed;
+                inset: 0 ;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 1s ease;
+            }
+
+            .home.visible {
+                opacity: 1;
+                pointer-events: all;
+            }
             
         </style>
     </head>
     <body>
         <div class="grid"></div>
         <div class="content">
-        <div class="screen-test">
-            <canvas id="stringArt"></canvas>
-        </div>   
-        <div class="status">Inicializando... AMAZE AMAZE AMAZE</div>
+            <div class="screen-test">
+                <canvas id="stringArt"></canvas>
+            </div>   
+            <div class="status">Inicializando... AMAZE AMAZE AMAZE</div>
             <h1>
                 <span class="typed">Hello, world!</span><span class="cursor">&nbsp;</span>
             </h1> 
+        </div>
+        <div class="home">
+
         </div>
         <script>
             const status = document.querySelector('.status');
@@ -130,6 +153,22 @@
             const canvas = document.querySelector('#stringArt');
             const ctx = canvas.getContext('2d');
             const totalPins = 400;
+
+            const home = document.querySelector('.home');
+
+            function goHome() {
+                screenTest.classList.add('zoom');
+                
+                screenTest.addEventListener('transitioned', function handleZoomEnd(e) {
+                    if (e.propertyName !== 'opacity') return;
+
+                    screenTest.classList.remove('visible', 'zoom');
+                    document.querySelector('.content').style.opacity = 0;
+                    home.classList.add('visible');
+
+                    screenTest.removeEventListener('transitioned', handleZoomEnd);
+                });
+            }
 
             function getPinPosition(pinIndex) {
                 const angle = (pinIndex / totalPins) * Math.PI * 2;
@@ -243,7 +282,7 @@
                                 prepareCanvas();
                                 drawStringArt(pinSequence, function () {
                                     typeText(typed, '_NEMETH', function () {
-                                        console.log('YURI_NEMETH completo - próxima etapa: zoom');
+                                        goHome();
                                     });
                                 });
                             });
