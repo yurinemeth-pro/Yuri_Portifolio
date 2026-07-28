@@ -131,10 +131,23 @@
                 opacity: 1;
                 pointer-events: all;
             }
+
+            .mobile-input {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 1px;
+                height: 1px;
+                opacity: 0;
+                border: none;
+                outline: none;
+                font-size: 16px;
+            }
             
         </style>
     </head>
     <body>
+        <input type="text" class="mobile-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
         <div class="grid"></div>
         <div class="content">
             <div class="screen-test">
@@ -161,6 +174,13 @@
 
             const home = document.querySelector('.home');
             const content = document.querySelector('.content');
+
+            const mobileInput = document.querySelector('.mobile-input');
+
+            document.addEventListener('click', function focusOnce() {
+                mobileInput.focus();
+                document.removeEventListener('touchstart', focusOnce);
+            });
 
             function goHome() {
                 home.classList.add('visible');
@@ -276,6 +296,7 @@
             }, 3000);
 
             document.addEventListener('keydown',  function (e) {
+                mobileInput.focus();
                 
                 if (e.key === 'Backspace') {
                     e.preventDefault();
