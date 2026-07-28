@@ -182,7 +182,7 @@
                 screenTest.style.maskImage = mask;
 
                 content.style.transform = 'scale(' + (1 + eased * 0.15) + ')';
-                content.style.opacity = 1 - eased;
+                content.style.opacity = 1 - t;
 
                 if (t < 1) {
                     requestAnimationFrame(animate);
