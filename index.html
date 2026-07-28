@@ -178,6 +178,8 @@
 
             const mobileInput = document.querySelector('.mobile-input');
 
+            const h1 = document.querySelector('h1');
+
             // ===== Mobile: focar o input escondido no primeiro toque/clique =====
             document.addEventListener('click', function focusOnce() {
                 mobileInput.focus();
@@ -214,6 +216,7 @@
             function goHome() {
                 home.classList.add('visible');
                 content.style.transition = 'none'; // desliga a transition do CSS, o JS assume o controle do fade
+                h1.style.animation = 'none';
 
                 const duration = 1400;
                 let startTime = null;
@@ -232,7 +235,7 @@
                     screenTest.style.maskImage = mask;
 
                     content.style.transform = 'scale(' + (1 + eased * 0.15) + ')';
-                    content.style.opacity = 1 - t; // curva LINEAR, só pro fade — mais suave
+                    h1.style.opacity = 1 - t; // curva LINEAR, só pro fade — mais suave
 
                     if (t < 1) {
                         requestAnimationFrame(animate);
