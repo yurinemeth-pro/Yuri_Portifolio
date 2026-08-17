@@ -144,18 +144,141 @@
                 font-size: 16px;
             }
 
-            /* ===== Página inicial: cabeçalho + timeline de carreira ===== */
+            /* ===== Página inicial: cabeçalho + perfil + timelines ===== */
             .home-content {
                 height: 100%;
                 overflow-y: auto;
                 padding: 5rem 1.5rem 4rem;
-                max-width: 720px;
+                max-width: 900px;
                 margin: 0 auto;
             }
 
             .home-header {
                 text-align: center;
                 margin-bottom: 3.5rem;
+            }
+
+            /* ---- Perfil: foto + texto de apresentação ---- */
+            .profile {
+                display: flex;
+                align-items: center;
+                gap: 2.5rem;
+                max-width: 640px;
+                margin: 0 auto 5rem;
+            }
+
+            .profile-photo {
+                flex-shrink: 0;
+                position: relative;
+                width: 160px;
+                height: 160px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 1px solid var(--dim);
+                background: rgba(109, 227, 201, 0.05);
+                cursor: ew-resize;
+                touch-action: none;
+            }
+
+            .profile-photo img {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+                user-select: none;
+                -webkit-user-drag: none;
+            }
+
+            .photo-after {
+                clip-path: inset(0 50% 0 0);
+            }
+
+            .photo-divider {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 50%;
+                width: 1px;
+                background: var(--accent);
+                box-shadow: 0 0 6px var(--accent);
+                transform: translateX(-50%);
+                pointer-events: none;
+            }
+
+            .photo-handle {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background: var(--bg);
+                border: 1px solid var(--accent);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.55rem;
+                color: var(--accent);
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+            }
+
+            .photo-caption {
+                text-align: center;
+                font-size: 0.6rem;
+                color: var(--dim);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                margin-top: 0.6rem;
+            }
+
+            .profile-text p {
+                font-size: 0.85rem;
+                line-height: 1.75;
+                color: var(--fg);
+                letter-spacing: normal;
+                text-align: left;
+            }
+
+            @media (max-width: 640px) {
+                .profile {
+                    flex-direction: column;
+                    text-align: center;
+                    gap: 1.5rem;
+                }
+                .profile-text p {
+                    text-align: center;
+                }
+            }
+
+            /* ---- Duas colunas: Experiência x Formação ---- */
+            .timelines {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+                align-items: start;
+            }
+
+            @media (max-width: 720px) {
+                .timelines {
+                    grid-template-columns: 1fr;
+                    gap: 0;
+                }
+                .timeline-column + .timeline-column {
+                    margin-top: 3.5rem;
+                }
+            }
+
+            .timeline-heading {
+                font-size: 0.7rem;
+                color: var(--dim);
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+                margin-bottom: 1.75rem;
+                padding-bottom: 0.6rem;
+                border-bottom: 1px solid var(--dim);
             }
 
             .home-name {
@@ -194,6 +317,12 @@
                 opacity: 0;
                 transform: translateY(12px);
                 transition: opacity 0.6s ease, transform 0.6s ease;
+                cursor: pointer;
+            }
+
+            .timeline-item:hover .timeline-title,
+            .timeline-item.expanded .timeline-title {
+                color: var(--accent);
             }
 
             .timeline-item.visible {
@@ -262,6 +391,40 @@
                 margin-top: 0.6rem;
                 letter-spacing: 0.1em;
             }
+
+            .timeline-hint {
+                font-size: 0.6rem;
+                color: var(--dim);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                margin-top: 0.6rem;
+                opacity: 0.6;
+                transition: opacity 0.3s ease;
+            }
+
+            .timeline-item:hover .timeline-hint,
+            .timeline-item.expanded .timeline-hint {
+                opacity: 0;
+            }
+
+            .timeline-details {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                margin-top: 0;
+                font-size: 0.72rem;
+                line-height: 1.6;
+                color: var(--fg);
+                letter-spacing: normal;
+                transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+            }
+
+            .timeline-item:hover .timeline-details,
+            .timeline-item.expanded .timeline-details {
+                max-height: 320px;
+                opacity: 1;
+                margin-top: 0.75rem;
+            }
             
         </style>
     </head>
@@ -283,7 +446,29 @@
                     <div class="home-name">YURI NEMETH</div>
                     <div class="home-role">Dados &middot; TI &middot; Sistemas</div>
                 </header>
-                <div class="timeline" id="timeline"></div>
+
+                <section class="profile">
+                    <div class="profile-photo">
+                        <!-- Coloque o arquivo "foto.jpg" na mesma pasta do index.html -->
+                        <img src="foto.jpg" alt="Foto de Yuri Nemeth">
+                    </div>
+                    <div class="profile-text">
+                        <p>
+                            Meu interesse por tecnologia nasceu da curiosidade — pela astronomia, pela engenharia aeroespacial e pela lógica por trás de um bom problema matemático. Sou enxadrista nas horas vagas, músico em uma banda com apresentações públicas pela minha cidade, e atualmente canalizo essa mesma curiosidade construindo um jogo de estratégia espacial inspirado no sobrevoo da Voyager 2 por Netuno. Acredito que dados, sistemas e boas histórias têm mais em comum do que parece — e é essa interseção que me trouxe até aqui.
+                        </p>
+                    </div>
+                </section>
+
+                <div class="timelines">
+                    <div class="timeline-column">
+                        <h2 class="timeline-heading">Experiência Profissional</h2>
+                        <div class="timeline" id="timeline-experience"></div>
+                    </div>
+                    <div class="timeline-column">
+                        <h2 class="timeline-heading">Formação</h2>
+                        <div class="timeline" id="timeline-education"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <script>
@@ -489,57 +674,84 @@
                 }
             });
 
-            // ===== Dados da jornada profissional =====
-            // Editar aqui conforme novas experiências/cursos forem surgindo.
-            const timelineData = [
-                {
-                    date: '2018 — 2021',
-                    title: 'Técnico em Informática para Internet',
-                    org: 'ETEC Praia Grande',
-                    desc: 'TCC premiado como melhor da área. Atuação em design, documentação e apresentação do projeto, com prototipagem em Figma.'
-                },
-                {
-                    date: '2021 — 2024',
-                    title: 'Análise e Desenvolvimento de Sistemas',
-                    org: 'FATEC Praia Grande',
-                    desc: '4 semestres concluídos. Matrícula pausada para dedicação ao trabalho.'
-                },
+            // ===== Dados: Experiência Profissional =====
+            // O campo "details" é o texto que aparece ao passar o mouse (ou tocar, no
+            // celular) em cima do bloco — escreva livremente, pode ter várias frases.
+            const experienceData = [
                 {
                     date: '2023',
                     title: 'Atendimento ao público (inglês)',
                     org: 'Intercâmbio — Boston, MA, EUA',
-                    desc: 'Atendimento e negociação em inglês, imersão internacional.'
+                    desc: 'Atendimento e negociação em inglês, imersão internacional.',
+                    details: ''
                 },
                 {
                     date: '2024',
                     title: 'Líder Técnico de Infraestrutura de TI',
                     org: 'Credlar Construtora',
-                    desc: ''
+                    desc: '',
+                    details: ''
                 },
                 {
                     date: '2024 — 2025',
                     title: 'Técnico de Informática em Infraestrutura',
                     org: 'GS Tecnologia',
-                    desc: 'Redes, servidores e suporte técnico.'
+                    desc: 'Redes, servidores e suporte técnico.',
+                    details: ''
                 },
                 {
                     date: '2025',
                     title: 'Analista de Custos',
                     org: 'Clínica Sion Saúde e Bem Estar',
-                    desc: 'Precificação, redução de custos e Excel avançado.'
+                    desc: 'Precificação, redução de custos e Excel avançado.',
+                    details: ''
                 },
                 {
                     date: '2025 — atual',
                     title: 'Vendedor Júnior de Marcenaria',
                     org: 'Obramax',
                     desc: 'Promovido por mérito a partir de Operador de Caixa, com recordes de atendimento e conversão.',
+                    details: '',
                     current: true
+                }
+            ];
+
+            // ===== Dados: Formação / Estudo =====
+            const educationData = [
+                {
+                    date: '2018 — 2021',
+                    title: 'Técnico em Informática para Internet',
+                    org: 'ETEC Praia Grande',
+                    desc: 'TCC premiado como melhor da área. Atuação em design, documentação e apresentação do projeto, com prototipagem em Figma.',
+                    details: ''
+                },
+                {
+                    date: '2021 — 2024',
+                    title: 'Análise e Desenvolvimento de Sistemas',
+                    org: 'FATEC Praia Grande',
+                    desc: '4 semestres concluídos. Matrícula pausada para dedicação ao trabalho.',
+                    details: ''
+                },
+                {
+                    date: '2023',
+                    title: 'Atendimento ao público (inglês)',
+                    org: 'Intercâmbio — Boston, MA, EUA',
+                    desc: 'Atendimento e negociação em inglês, imersão internacional.',
+                    details: ''
+                },
+                {
+                    date: '2025',
+                    title: 'Getting Started with Data',
+                    org: 'IBM SkillsBuild',
+                    desc: 'Formação introdutória em fundamentos de dados.',
+                    details: ''
                 },
                 {
                     date: 'Em andamento',
                     title: 'Engenharia de QA',
                     org: 'Mate Academy',
                     desc: '',
+                    details: '',
                     tag: 'EM ANDAMENTO'
                 },
                 {
@@ -547,15 +759,16 @@
                     title: 'Análise de Dados',
                     org: 'Mate Academy',
                     desc: '',
+                    details: '',
                     tag: 'EM ANDAMENTO'
                 }
             ];
 
-            // ===== Monta a timeline no DOM a partir dos dados acima =====
-            function renderTimeline() {
-                const container = document.querySelector('#timeline');
+            // ===== Monta uma timeline no DOM a partir de um array de dados =====
+            function renderTimeline(containerId, data) {
+                const container = document.querySelector(containerId);
 
-                timelineData.forEach(function (item) {
+                data.forEach(function (item) {
                     const el = document.createElement('div');
                     el.className = 'timeline-item' + (item.current ? ' current' : '');
 
@@ -564,8 +777,16 @@
                     html += '<div class="timeline-org">' + item.org + '</div>';
                     if (item.desc) html += '<div class="timeline-desc">' + item.desc + '</div>';
                     if (item.tag) html += '<div class="timeline-tag">' + item.tag + '</div>';
+                    html += '<div class="timeline-details">' + (item.details || '') + '</div>';
+                    if (item.details) html += '<div class="timeline-hint">passe o mouse • detalhes</div>';
 
                     el.innerHTML = html;
+
+                    // Mobile não tem hover — o toque alterna a classe "expanded"
+                    el.addEventListener('click', function () {
+                        el.classList.toggle('expanded');
+                    });
+
                     container.appendChild(el);
                 });
 
@@ -578,12 +799,13 @@
                     });
                 }, { threshold: 0.2 });
 
-                document.querySelectorAll('.timeline-item').forEach(function (item) {
+                container.querySelectorAll('.timeline-item').forEach(function (item) {
                     observer.observe(item);
                 });
             }
 
-            renderTimeline();
+            renderTimeline('#timeline-experience', experienceData);
+            renderTimeline('#timeline-education', educationData);
         </script>
     </body>
 </html>
