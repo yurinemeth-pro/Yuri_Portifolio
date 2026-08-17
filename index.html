@@ -143,6 +143,125 @@
                 outline: none;
                 font-size: 16px;
             }
+
+            /* ===== Página inicial: cabeçalho + timeline de carreira ===== */
+            .home-content {
+                height: 100%;
+                overflow-y: auto;
+                padding: 5rem 1.5rem 4rem;
+                max-width: 720px;
+                margin: 0 auto;
+            }
+
+            .home-header {
+                text-align: center;
+                margin-bottom: 3.5rem;
+            }
+
+            .home-name {
+                font-size: 1.4rem;
+                letter-spacing: 0.3em;
+                color: var(--accent);
+                text-shadow: 0 0 15px rgba(109, 227, 201, 0.3);
+            }
+
+            .home-role {
+                font-size: 0.7rem;
+                color: var(--dim);
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                margin-top: 0.5rem;
+            }
+
+            .timeline {
+                position: relative;
+                padding-left: 1.5rem;
+            }
+
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0.4rem;
+                bottom: 0.4rem;
+                width: 1px;
+                background: var(--dim);
+            }
+
+            .timeline-item {
+                position: relative;
+                padding-bottom: 2.5rem;
+                opacity: 0;
+                transform: translateY(12px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+
+            .timeline-item.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: -1.5rem;
+                top: 0.35rem;
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: var(--dim);
+                transform: translateX(-3px);
+            }
+
+            .timeline-item.current::before {
+                background: var(--accent);
+                animation: pulse 2s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+                0%, 100% { box-shadow: 0 0 4px var(--accent); }
+                50% { box-shadow: 0 0 12px var(--accent); }
+            }
+
+            .timeline-date {
+                font-size: 0.65rem;
+                color: var(--dim);
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+            }
+
+            .timeline-title {
+                font-size: 1rem;
+                color: var(--fg);
+                margin-top: 0.3rem;
+                letter-spacing: 0.05em;
+            }
+
+            .timeline-org {
+                font-size: 0.75rem;
+                color: var(--accent);
+                margin-top: 0.15rem;
+            }
+
+            .timeline-desc {
+                font-size: 0.75rem;
+                color: var(--dim);
+                line-height: 1.5;
+                margin-top: 0.5rem;
+                max-width: 46ch;
+                letter-spacing: normal;
+            }
+
+            .timeline-tag {
+                display: inline-block;
+                font-size: 0.6rem;
+                color: var(--accent);
+                border: 1px solid var(--accent);
+                padding: 0.15rem 0.5rem;
+                border-radius: 2px;
+                margin-top: 0.6rem;
+                letter-spacing: 0.1em;
+            }
             
         </style>
     </head>
@@ -159,7 +278,13 @@
             </h1> 
         </div>
         <div class="home">
-
+            <div class="home-content">
+                <header class="home-header">
+                    <div class="home-name">YURI NEMETH</div>
+                    <div class="home-role">Dados &middot; TI &middot; Sistemas</div>
+                </header>
+                <div class="timeline" id="timeline"></div>
+            </div>
         </div>
         <script>
             // ===== Referências aos elementos do HTML =====
@@ -363,6 +488,102 @@
                     }
                 }
             });
+
+            // ===== Dados da jornada profissional =====
+            // Editar aqui conforme novas experiências/cursos forem surgindo.
+            const timelineData = [
+                {
+                    date: '2018 — 2021',
+                    title: 'Técnico em Informática para Internet',
+                    org: 'ETEC Praia Grande',
+                    desc: 'TCC premiado como melhor da área. Atuação em design, documentação e apresentação do projeto, com prototipagem em Figma.'
+                },
+                {
+                    date: '2021 — 2024',
+                    title: 'Análise e Desenvolvimento de Sistemas',
+                    org: 'FATEC Praia Grande',
+                    desc: '4 semestres concluídos. Matrícula pausada para dedicação ao trabalho.'
+                },
+                {
+                    date: '2023',
+                    title: 'Atendimento ao público (inglês)',
+                    org: 'Intercâmbio — Boston, MA, EUA',
+                    desc: 'Atendimento e negociação em inglês, imersão internacional.'
+                },
+                {
+                    date: '2024',
+                    title: 'Líder Técnico de Infraestrutura de TI',
+                    org: 'Credlar Construtora',
+                    desc: ''
+                },
+                {
+                    date: '2024 — 2025',
+                    title: 'Técnico de Informática em Infraestrutura',
+                    org: 'GS Tecnologia',
+                    desc: 'Redes, servidores e suporte técnico.'
+                },
+                {
+                    date: '2025',
+                    title: 'Analista de Custos',
+                    org: 'Clínica Sion Saúde e Bem Estar',
+                    desc: 'Precificação, redução de custos e Excel avançado.'
+                },
+                {
+                    date: '2025 — atual',
+                    title: 'Vendedor Júnior de Marcenaria',
+                    org: 'Obramax',
+                    desc: 'Promovido por mérito a partir de Operador de Caixa, com recordes de atendimento e conversão.',
+                    current: true
+                },
+                {
+                    date: 'Em andamento',
+                    title: 'Engenharia de QA',
+                    org: 'Mate Academy',
+                    desc: '',
+                    tag: 'EM ANDAMENTO'
+                },
+                {
+                    date: 'Em andamento',
+                    title: 'Análise de Dados',
+                    org: 'Mate Academy',
+                    desc: '',
+                    tag: 'EM ANDAMENTO'
+                }
+            ];
+
+            // ===== Monta a timeline no DOM a partir dos dados acima =====
+            function renderTimeline() {
+                const container = document.querySelector('#timeline');
+
+                timelineData.forEach(function (item) {
+                    const el = document.createElement('div');
+                    el.className = 'timeline-item' + (item.current ? ' current' : '');
+
+                    let html = '<div class="timeline-date">' + item.date + '</div>';
+                    html += '<div class="timeline-title">' + item.title + '</div>';
+                    html += '<div class="timeline-org">' + item.org + '</div>';
+                    if (item.desc) html += '<div class="timeline-desc">' + item.desc + '</div>';
+                    if (item.tag) html += '<div class="timeline-tag">' + item.tag + '</div>';
+
+                    el.innerHTML = html;
+                    container.appendChild(el);
+                });
+
+                // Cada item entra suavemente conforme aparece na tela (scroll)
+                const observer = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.2 });
+
+                document.querySelectorAll('.timeline-item').forEach(function (item) {
+                    observer.observe(item);
+                });
+            }
+
+            renderTimeline();
         </script>
     </body>
 </html>
