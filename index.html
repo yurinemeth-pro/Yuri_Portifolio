@@ -53,6 +53,12 @@
                 letter-spacing: 0.15em;
                 transition: opacity 1s ease;
                 transform-origin: 50% 50%;
+                /* Precisa ficar SEMPRE acima de .home, mesmo depois que o JS aplica
+                   um transform em goHome() — um transform cria um novo stacking
+                   context, e sem um z-index explícito aqui .home (z-index:1) passava
+                   a vencer essa disputa e aparecia por cima do overlay mascarado,
+                   revelando a página inteira de uma vez em vez de só pelo furo. */
+                z-index: 10;
             }
 
             .status {
@@ -144,34 +150,117 @@
                 font-size: 16px;
             }
 
-            /* ===== Página inicial: cabeçalho + perfil + timelines ===== */
-            .home-content {
+            /* ===== Barra de rolamento customizada =====
+               Substitui a barra branca padrão do navegador por algo alinhado
+               à paleta (dim/accent, fina, sem invadir o design).
+               TODO (futuro): trocar o thumb por um cubo mágico em vídeo/canvas
+               que "se resolve" conforme o usuário rola até o fim da página. */
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: var(--dim) transparent;
+            }
+
+            .home-main::-webkit-scrollbar,
+            .timeline-row::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+
+            .home-main::-webkit-scrollbar-track,
+            .timeline-row::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .home-main::-webkit-scrollbar-thumb,
+            .timeline-row::-webkit-scrollbar-thumb {
+                background: var(--dim);
+                border-radius: 3px;
+            }
+
+            .home-main::-webkit-scrollbar-thumb:hover,
+            .timeline-row::-webkit-scrollbar-thumb:hover {
+                background: var(--accent);
+            }
+
+            /* ===== Página inicial: shell full-screen =====
+               Em vez de uma coluna central com "sobras" nas laterais, a home
+               agora ocupa a tela inteira: uma coluna fixa à esquerda (foto +
+               identidade) e uma área principal à direita, ela sim rolável. */
+            .home-shell {
+                height: 100%;
+                display: flex;
+                align-items: flex-start;
+                gap: 3.5rem;
+                padding: 3rem 3rem 3rem 3.5rem;
+            }
+
+            /* ---- Coluna fixa: foto + identidade ---- */
+            .corner-profile {
+                flex: 0 0 200px;
+                position: sticky;
+                top: 3rem;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.25rem;
+            }
+
+            .corner-id .home-name {
+                font-size: 1.1rem;
+                letter-spacing: 0.25em;
+            }
+
+            .corner-id .home-role {
+                margin-top: 0.4rem;
+            }
+
+            /* ---- Área principal: bio + linhas horizontais ---- */
+            .home-main {
+                flex: 1 1 auto;
+                min-width: 0;
                 height: 100%;
                 overflow-y: auto;
-                padding: 5rem 1.5rem 4rem;
-                max-width: 900px;
-                margin: 0 auto;
+                padding-right: 0.5rem;
+                padding-bottom: 3rem;
             }
 
-            .home-header {
-                text-align: center;
-                margin-bottom: 3.5rem;
+            .bio p {
+                font-size: 0.85rem;
+                line-height: 1.75;
+                color: var(--fg);
+                letter-spacing: normal;
+                text-align: left;
+                max-width: 68ch;
             }
 
-            /* ---- Perfil: foto + texto de apresentação ---- */
-            .profile {
-                display: flex;
-                align-items: center;
-                gap: 2.5rem;
-                max-width: 640px;
-                margin: 0 auto 5rem;
+            .row-section {
+                margin-top: 3.5rem;
             }
 
+            @media (max-width: 860px) {
+                .home-shell {
+                    flex-direction: column;
+                    padding: 4rem 1.25rem 3rem;
+                    gap: 2.5rem;
+                }
+                .corner-profile {
+                    position: static;
+                    flex-direction: row;
+                    align-items: center;
+                }
+                .home-main {
+                    width: 100%;
+                    height: auto;
+                    overflow-y: visible;
+                }
+            }
+
+            /* ---- Perfil: foto (slider antes/depois) ---- */
             .profile-photo {
                 flex-shrink: 0;
                 position: relative;
-                width: 160px;
-                height: 160px;
+                width: 96px;
+                height: 96px;
                 border-radius: 50%;
                 overflow: hidden;
                 border: 1px solid var(--dim);
@@ -234,43 +323,6 @@
                 margin-top: 0.6rem;
             }
 
-            .profile-text p {
-                font-size: 0.85rem;
-                line-height: 1.75;
-                color: var(--fg);
-                letter-spacing: normal;
-                text-align: left;
-            }
-
-            @media (max-width: 640px) {
-                .profile {
-                    flex-direction: column;
-                    text-align: center;
-                    gap: 1.5rem;
-                }
-                .profile-text p {
-                    text-align: center;
-                }
-            }
-
-            /* ---- Duas colunas: Experiência x Formação ---- */
-            .timelines {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 3rem;
-                align-items: start;
-            }
-
-            @media (max-width: 720px) {
-                .timelines {
-                    grid-template-columns: 1fr;
-                    gap: 0;
-                }
-                .timeline-column + .timeline-column {
-                    margin-top: 3.5rem;
-                }
-            }
-
             .timeline-heading {
                 font-size: 0.7rem;
                 color: var(--dim);
@@ -296,28 +348,34 @@
                 margin-top: 0.5rem;
             }
 
-            .timeline {
-                position: relative;
-                padding-left: 1.5rem;
-            }
-
-            .timeline::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 0.4rem;
-                bottom: 0.4rem;
-                width: 1px;
-                background: var(--dim);
+            /* Linha horizontal rolável — estilo "carrossel" de streaming.
+               O scroll vertical do mouse é convertido em scroll horizontal
+               via JS quando o cursor está sobre a faixa (ver script no fim). */
+            .timeline-row {
+                display: flex;
+                gap: 1.25rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 0.4rem 0.4rem 1rem 0.4rem;
+                scroll-behavior: smooth;
             }
 
             .timeline-item {
                 position: relative;
-                padding-bottom: 2.5rem;
+                flex: 0 0 270px;
+                padding: 1.1rem 1.25rem;
+                border: 1px solid var(--dim);
+                border-radius: 4px;
+                background: rgba(109, 227, 201, 0.03);
                 opacity: 0;
                 transform: translateY(12px);
-                transition: opacity 0.6s ease, transform 0.6s ease;
+                transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease;
                 cursor: pointer;
+            }
+
+            .timeline-item:hover,
+            .timeline-item.expanded {
+                border-color: var(--accent);
             }
 
             .timeline-item:hover .timeline-title,
@@ -330,20 +388,8 @@
                 transform: translateY(0);
             }
 
-            .timeline-item::before {
-                content: '';
-                position: absolute;
-                left: -1.5rem;
-                top: 0.35rem;
-                width: 7px;
-                height: 7px;
-                border-radius: 50%;
-                background: var(--dim);
-                transform: translateX(-3px);
-            }
-
-            .timeline-item.current::before {
-                background: var(--accent);
+            .timeline-item.current {
+                border-color: var(--accent);
                 animation: pulse 2s ease-in-out infinite;
             }
 
@@ -377,8 +423,70 @@
                 color: var(--dim);
                 line-height: 1.5;
                 margin-top: 0.5rem;
-                max-width: 46ch;
                 letter-spacing: normal;
+            }
+
+            /* ---- Projeto em destaque: ERNEMETH-RTS ---- */
+            .project-feature {
+                border: 1px solid var(--dim);
+                border-radius: 4px;
+                padding: 1.5rem 1.75rem;
+                background: rgba(109, 227, 201, 0.03);
+                max-width: 68ch;
+            }
+
+            .project-feature .project-title {
+                font-size: 1.05rem;
+                color: var(--accent);
+                letter-spacing: 0.05em;
+            }
+
+            .project-feature .project-tagline {
+                font-size: 0.7rem;
+                color: var(--dim);
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+                margin-top: 0.3rem;
+            }
+
+            .project-feature p {
+                font-size: 0.8rem;
+                line-height: 1.7;
+                color: var(--fg);
+                letter-spacing: normal;
+                margin-top: 1rem;
+            }
+
+            .project-feature .project-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 1.1rem;
+            }
+
+            .project-feature .project-tags span {
+                font-size: 0.6rem;
+                color: var(--accent);
+                border: 1px solid var(--accent);
+                padding: 0.15rem 0.5rem;
+                border-radius: 2px;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+            }
+
+            .project-feature .project-link {
+                display: inline-block;
+                margin-top: 1.25rem;
+                font-size: 0.7rem;
+                color: var(--accent);
+                text-decoration: none;
+                border-bottom: 1px solid var(--accent);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+            }
+
+            .project-feature .project-link:hover {
+                opacity: 0.75;
             }
 
             .timeline-tag {
@@ -421,7 +529,7 @@
 
             .timeline-item:hover .timeline-details,
             .timeline-item.expanded .timeline-details {
-                max-height: 320px;
+                max-height: 480px;
                 opacity: 1;
                 margin-top: 0.75rem;
             }
@@ -441,34 +549,55 @@
             </h1> 
         </div>
         <div class="home">
-            <div class="home-content">
-                <header class="home-header">
-                    <div class="home-name">YURI NEMETH</div>
-                    <div class="home-role">Dados &middot; TI &middot; Sistemas</div>
-                </header>
-
-                <section class="profile">
+            <div class="home-shell">
+                <aside class="corner-profile">
                     <div class="profile-photo">
                         <!-- Coloque o arquivo "foto.jpg" na mesma pasta do index.html -->
                         <img src="foto.jpeg" alt="Foto de Yuri Nemeth">
                     </div>
-                    <div class="profile-text">
+                    <div class="corner-id">
+                        <div class="home-name">YURI NEMETH</div>
+                        <div class="home-role">Dados &middot; TI &middot; Sistemas</div>
+                    </div>
+                </aside>
+
+                <main class="home-main">
+                    <section class="bio">
                         <p>
                             Meu interesse por tecnologia nasceu da curiosidade — pela astronomia, pela engenharia aeroespacial e pela lógica por trás de um bom problema matemático. Sou enxadrista nas horas vagas, músico com apresentações públicas pela minha cidade, e atualmente canalizo essa mesma curiosidade construindo um jogo de estratégia espacial inspirado em Ender's Game, que é um aclamado romance de ficção científica militar escrito por Orson Scott Card, publicado em 1985, e mesclando histórias reais da nossa astronomia, como o sobrevoo da Voyager 2 por Netuno. Acredito que dados, sistemas e boas histórias têm mais em comum do que parecem, acredito que elas se complementam e são interdependentes. Um dado leva consigo a história que, lida corretamente, pinta um sistema — e é essa interseção que me trouxe até aqui.
                         </p>
-                    </div>
-                </section>
+                    </section>
 
-                <div class="timelines">
-                    <div class="timeline-column">
+                    <section class="row-section">
                         <h2 class="timeline-heading">Experiência Profissional</h2>
-                        <div class="timeline" id="timeline-experience"></div>
-                    </div>
-                    <div class="timeline-column">
+                        <div class="timeline-row" id="timeline-experience"></div>
+                    </section>
+
+                    <section class="row-section">
                         <h2 class="timeline-heading">Formação</h2>
-                        <div class="timeline" id="timeline-education"></div>
-                    </div>
-                </div>
+                        <div class="timeline-row" id="timeline-education"></div>
+                    </section>
+
+                    <section class="row-section">
+                        <h2 class="timeline-heading">Projeto em Destaque</h2>
+                        <div class="project-feature">
+                            <div class="project-title">ERNEMETH-RTS</div>
+                            <div class="project-tagline">RTS / Tower Defense espacial &middot; Unity &middot; GPL-3.0</div>
+                            <p>
+                                Jogo de estratégia espacial em desenvolvimento, ancorado no sobrevoo real da Voyager 2 por Netuno em agosto de 1989: telescópios detectam um objeto anômalo, um satélite não-tripulado é enviado para escaneá-lo e o próprio escaneamento — não hostilidade — dispara a reação de um enxame alienígena. A lore dos inimigos segue um comportamento de formigueiro real (stigmergy, via campo de feromônio compartilhado), não um bando coeso — decisão consciente contra o padrão clássico de Boids. O Sistema Solar já roda com órbitas, escalas e câmera de zoom baseadas em dados reais dos planetas, construído antes de qualquer sistema de jogabilidade.
+                            </p>
+                            <div class="project-tags">
+                                <span>Unity (2D/2.5D)</span>
+                                <span>C#</span>
+                                <span>GPL-3.0</span>
+                                <span>Mecânica de enxame</span>
+                                <span>Sistema Solar real</span>
+                            </div>
+                            <!-- Trocar "#" pelo link do repositório público assim que estiver pronto para divulgação -->
+                            <a class="project-link" href="#">Ver repositório</a>
+                        </div>
+                    </section>
+                </main>
             </div>
         </div>
         <script>
@@ -807,6 +936,18 @@
 
             renderTimeline('#timeline-experience', experienceData);
             renderTimeline('#timeline-education', educationData);
+
+            // ===== Faixas horizontais estilo Netflix =====
+            // Converte a rolagem vertical da rodinha do mouse em rolagem
+            // horizontal da faixa, mas SÓ enquanto o cursor está sobre ela —
+            // fora dela, a rolagem normal da página continua funcionando.
+            document.querySelectorAll('.timeline-row').forEach(function (row) {
+                row.addEventListener('wheel', function (e) {
+                    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // já é gesto horizontal (trackpad), deixa passar
+                    e.preventDefault();
+                    row.scrollLeft += e.deltaY;
+                }, { passive: false });
+            });
         </script>
     </body>
 </html>
