@@ -11,6 +11,10 @@
                 --fg: #d7e6e2;
                 --accent: #6de3c9;
                 --dim: #3a4a48;
+                /* --dim é escuro demais pra texto de leitura corrida em cima de
+                   um fundo quase preto — mantido só pra linhas/bordas finas.
+                   --muted é o tom pra textos secundários (datas, orgs, legendas). */
+                --muted: #8fa8a2;
             }
 
             * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -63,7 +67,7 @@
 
             .status {
                 font-size: 0.7rem;
-                color: var(--dim);
+                color: var(--muted);
                 text-transform: uppercase;
                 margin-bottom: 1rem;
                 opacity: 0;
@@ -160,98 +164,74 @@
                 scrollbar-color: var(--dim) transparent;
             }
 
-            .home-main::-webkit-scrollbar,
+            .home-shell::-webkit-scrollbar,
             .timeline-row::-webkit-scrollbar {
                 width: 6px;
                 height: 6px;
             }
 
-            .home-main::-webkit-scrollbar-track,
+            .home-shell::-webkit-scrollbar-track,
             .timeline-row::-webkit-scrollbar-track {
                 background: transparent;
             }
 
-            .home-main::-webkit-scrollbar-thumb,
+            .home-shell::-webkit-scrollbar-thumb,
             .timeline-row::-webkit-scrollbar-thumb {
                 background: var(--dim);
                 border-radius: 3px;
             }
 
-            .home-main::-webkit-scrollbar-thumb:hover,
+            .home-shell::-webkit-scrollbar-thumb:hover,
             .timeline-row::-webkit-scrollbar-thumb:hover {
                 background: var(--accent);
             }
 
-            /* ===== Página inicial: shell full-screen =====
-               Em vez de uma coluna central com "sobras" nas laterais, a home
-               agora ocupa a tela inteira: uma coluna fixa à esquerda (foto +
-               identidade) e uma área principal à direita, ela sim rolável. */
+            /* ===== Página inicial: cabeçalho centralizado + faixas full-width =====
+               A foto é circular, então centralizada no topo (com o texto de
+               apresentação logo abaixo, também centralizado) é o que fica
+               mais natural — o resto da página (timelines, projeto) usa a
+               largura inteira disponível, sem ficar preso a uma coluna fixa. */
             .home-shell {
                 height: 100%;
-                display: flex;
-                align-items: flex-start;
-                gap: 3.5rem;
-                padding: 3rem 3rem 3rem 3.5rem;
+                overflow-y: auto;
+                padding: 3.5rem 3rem 4rem;
             }
 
-            /* ---- Coluna fixa: foto + identidade ---- */
-            .corner-profile {
-                flex: 0 0 200px;
-                position: sticky;
-                top: 3rem;
+            .home-header {
                 display: flex;
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 1.25rem;
+                align-items: center;
+                text-align: center;
+                max-width: 720px;
+                margin: 0 auto 3rem;
+                gap: 1rem;
             }
 
-            .corner-id .home-name {
-                font-size: 1.1rem;
-                letter-spacing: 0.25em;
+            .home-header .profile-photo {
+                width: 112px;
+                height: 112px;
             }
 
-            .corner-id .home-role {
-                margin-top: 0.4rem;
-            }
-
-            /* ---- Área principal: bio + linhas horizontais ---- */
-            .home-main {
-                flex: 1 1 auto;
-                min-width: 0;
-                height: 100%;
-                overflow-y: auto;
-                padding-right: 0.5rem;
-                padding-bottom: 3rem;
+            .bio {
+                max-width: 760px;
+                margin: 0 auto;
+                text-align: center;
             }
 
             .bio p {
-                font-size: 0.85rem;
-                line-height: 1.75;
+                font-size: 0.95rem;
+                line-height: 1.85;
                 color: var(--fg);
                 letter-spacing: normal;
-                text-align: left;
-                max-width: 68ch;
             }
 
             .row-section {
-                margin-top: 3.5rem;
+                margin-top: 4rem;
             }
 
-            @media (max-width: 860px) {
+            @media (max-width: 640px) {
                 .home-shell {
-                    flex-direction: column;
-                    padding: 4rem 1.25rem 3rem;
-                    gap: 2.5rem;
-                }
-                .corner-profile {
-                    position: static;
-                    flex-direction: row;
-                    align-items: center;
-                }
-                .home-main {
-                    width: 100%;
-                    height: auto;
-                    overflow-y: visible;
+                    padding: 3rem 1.25rem 3rem;
                 }
             }
 
@@ -324,8 +304,8 @@
             }
 
             .timeline-heading {
-                font-size: 0.7rem;
-                color: var(--dim);
+                font-size: 0.78rem;
+                color: var(--muted);
                 text-transform: uppercase;
                 letter-spacing: 0.2em;
                 margin-bottom: 1.75rem;
@@ -334,15 +314,15 @@
             }
 
             .home-name {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
                 letter-spacing: 0.3em;
                 color: var(--accent);
                 text-shadow: 0 0 15px rgba(109, 227, 201, 0.3);
             }
 
             .home-role {
-                font-size: 0.7rem;
-                color: var(--dim);
+                font-size: 0.75rem;
+                color: var(--muted);
                 letter-spacing: 0.2em;
                 text-transform: uppercase;
                 margin-top: 0.5rem;
@@ -351,36 +331,36 @@
             /* Linha horizontal rolável — estilo "carrossel" de streaming.
                O scroll vertical do mouse é convertido em scroll horizontal
                via JS quando o cursor está sobre a faixa (ver script no fim). */
+            /* Linha horizontal rolável — estilo "carrossel" de streaming.
+               O scroll vertical do mouse é convertido em scroll horizontal
+               via JS quando o cursor está sobre a faixa (ver script no fim).
+               align-items: flex-start é essencial aqui — sem isso, o flexbox
+               estica todos os cards da linha pra altura do mais alto (o
+               esticamento por padrão é "stretch"), e quando um card abria os
+               detalhes e ficava mais alto, TODOS os outros pareciam "abrir"
+               junto, só que vazios. */
             .timeline-row {
                 display: flex;
+                align-items: flex-start;
                 gap: 1.25rem;
                 overflow-x: auto;
                 overflow-y: hidden;
-                padding: 0.4rem 0.4rem 1rem 0.4rem;
+                padding: 0.6rem 0.4rem 1.5rem 0.4rem;
                 scroll-behavior: smooth;
             }
 
             .timeline-item {
                 position: relative;
-                flex: 0 0 270px;
-                padding: 1.1rem 1.25rem;
-                border: 1px solid var(--dim);
+                flex: 0 0 280px;
+                padding: 1.2rem 1.35rem;
+                border: 1px solid transparent;
                 border-radius: 4px;
-                background: rgba(109, 227, 201, 0.03);
+                background: rgba(109, 227, 201, 0.025);
                 opacity: 0;
                 transform: translateY(12px);
-                transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease;
+                transition: opacity 0.6s ease, transform 0.3s ease, border-color 0.25s ease,
+                            box-shadow 0.25s ease, background 0.25s ease;
                 cursor: pointer;
-            }
-
-            .timeline-item:hover,
-            .timeline-item.expanded {
-                border-color: var(--accent);
-            }
-
-            .timeline-item:hover .timeline-title,
-            .timeline-item.expanded .timeline-title {
-                color: var(--accent);
             }
 
             .timeline-item.visible {
@@ -388,9 +368,40 @@
                 transform: translateY(0);
             }
 
+            /* Passar o mouse só convida a clicar — brilha a borda, nada expande ainda */
+            .timeline-item:hover {
+                border-color: var(--accent);
+                box-shadow: 0 0 14px rgba(109, 227, 201, 0.2);
+            }
+
+            /* Clicar é que abre — só ESSE card, se destacando dos vizinhos */
+            .timeline-item.expanded {
+                border-color: var(--accent);
+                box-shadow: 0 0 22px rgba(109, 227, 201, 0.3);
+                background: rgba(109, 227, 201, 0.06);
+                transform: translateY(-4px) scale(1.03);
+                z-index: 2;
+            }
+
+            .timeline-item:hover .timeline-title,
+            .timeline-item.expanded .timeline-title {
+                color: var(--accent);
+            }
+
+            /* Quando um card da faixa está aberto, os outros somem de evidência
+               (igual à seleção da Netflix), reforçando que só um está "focado" */
+            .timeline-row.has-expanded .timeline-item:not(.expanded) {
+                opacity: 0.4;
+            }
+
             .timeline-item.current {
                 border-color: var(--accent);
                 animation: pulse 2s ease-in-out infinite;
+            }
+
+            .timeline-row.has-expanded .timeline-item.current:not(.expanded) {
+                animation: none;
+                box-shadow: none;
             }
 
             @keyframes pulse {
@@ -399,76 +410,106 @@
             }
 
             .timeline-date {
-                font-size: 0.65rem;
-                color: var(--dim);
+                font-size: 0.72rem;
+                color: var(--muted);
                 letter-spacing: 0.15em;
                 text-transform: uppercase;
             }
 
             .timeline-title {
-                font-size: 1rem;
+                font-size: 1.15rem;
                 color: var(--fg);
-                margin-top: 0.3rem;
-                letter-spacing: 0.05em;
+                margin-top: 0.35rem;
+                letter-spacing: 0.03em;
             }
 
             .timeline-org {
-                font-size: 0.75rem;
+                font-size: 0.85rem;
                 color: var(--accent);
-                margin-top: 0.15rem;
+                margin-top: 0.2rem;
             }
 
             .timeline-desc {
-                font-size: 0.75rem;
-                color: var(--dim);
-                line-height: 1.5;
-                margin-top: 0.5rem;
+                font-size: 0.85rem;
+                color: var(--muted);
+                line-height: 1.55;
+                margin-top: 0.6rem;
                 letter-spacing: normal;
             }
 
-            /* ---- Projeto em destaque: ERNEMETH-RTS ---- */
+            /* ---- Projeto em destaque: ERNEMETH-RTS, ocupa um "slide" cheio ---- */
+            .project-slide {
+                position: relative;
+                min-height: 82vh;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                border-top: 1px solid var(--dim);
+                padding-top: 3rem;
+            }
+
             .project-feature {
-                border: 1px solid var(--dim);
-                border-radius: 4px;
-                padding: 1.5rem 1.75rem;
-                background: rgba(109, 227, 201, 0.03);
-                max-width: 68ch;
+                position: relative;
+                z-index: 2;
+                max-width: 640px;
             }
 
             .project-feature .project-title {
-                font-size: 1.05rem;
+                font-size: 1.3rem;
                 color: var(--accent);
-                letter-spacing: 0.05em;
+                letter-spacing: 0.06em;
             }
 
             .project-feature .project-tagline {
-                font-size: 0.7rem;
-                color: var(--dim);
+                font-size: 0.78rem;
+                color: var(--muted);
                 text-transform: uppercase;
                 letter-spacing: 0.15em;
-                margin-top: 0.3rem;
+                margin-top: 0.35rem;
             }
 
-            .project-feature p {
-                font-size: 0.8rem;
-                line-height: 1.7;
+            .project-feature > p {
+                font-size: 0.92rem;
+                line-height: 1.8;
                 color: var(--fg);
                 letter-spacing: normal;
-                margin-top: 1rem;
+                margin-top: 1.25rem;
+            }
+
+            .project-topics {
+                margin-top: 2rem;
+                display: grid;
+                gap: 1.5rem;
+            }
+
+            .project-topic h3 {
+                font-size: 0.75rem;
+                color: var(--accent);
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+                font-weight: 400;
+            }
+
+            .project-topic p {
+                font-size: 0.85rem;
+                line-height: 1.7;
+                color: var(--muted);
+                letter-spacing: normal;
+                margin-top: 0.45rem;
             }
 
             .project-feature .project-tags {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 0.5rem;
-                margin-top: 1.1rem;
+                margin-top: 1.75rem;
             }
 
             .project-feature .project-tags span {
-                font-size: 0.6rem;
+                font-size: 0.65rem;
                 color: var(--accent);
                 border: 1px solid var(--accent);
-                padding: 0.15rem 0.5rem;
+                padding: 0.2rem 0.55rem;
                 border-radius: 2px;
                 letter-spacing: 0.1em;
                 text-transform: uppercase;
@@ -476,8 +517,8 @@
 
             .project-feature .project-link {
                 display: inline-block;
-                margin-top: 1.25rem;
-                font-size: 0.7rem;
+                margin-top: 1.5rem;
+                font-size: 0.75rem;
                 color: var(--accent);
                 text-decoration: none;
                 border-bottom: 1px solid var(--accent);
@@ -487,6 +528,55 @@
 
             .project-feature .project-link:hover {
                 opacity: 0.75;
+            }
+
+            /* ---- Visual: Sistema Solar, só a metade visível =====
+               O Sol fica posicionado exatamente na borda direita do próprio
+               viewBox do SVG — por isso metade dele (e das órbitas) já nasce
+               fora da área desenhável e é cortada pelo próprio SVG, sem
+               precisar de nenhum truque de overflow/clip-path por fora.
+               Cada planeta gira em torno do Sol via <animateTransform>
+               (rotação pura), com órbitas mais internas girando mais rápido
+               que as externas — um aceno à 3ª lei de Kepler, sem tentar
+               simular ela com precisão. */
+            .solar-visual {
+                position: absolute;
+                top: 50%;
+                right: -4rem;
+                transform: translateY(-50%);
+                width: min(46vw, 620px);
+                height: min(46vw, 620px);
+                pointer-events: none;
+                z-index: 1;
+            }
+
+            .solar-visual svg {
+                display: block;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .orbit-line {
+                fill: none;
+                stroke: var(--dim);
+                stroke-width: 1;
+                opacity: 0.6;
+            }
+
+            .sun {
+                fill: var(--accent);
+                opacity: 0.85;
+            }
+
+            .planet {
+                fill: var(--fg);
+            }
+
+            @media (max-width: 860px) {
+                .solar-visual {
+                    opacity: 0.35;
+                }
             }
 
             .timeline-tag {
@@ -501,16 +591,15 @@
             }
 
             .timeline-hint {
-                font-size: 0.6rem;
-                color: var(--dim);
+                font-size: 0.68rem;
+                color: var(--muted);
                 letter-spacing: 0.1em;
                 text-transform: uppercase;
                 margin-top: 0.6rem;
-                opacity: 0.6;
+                opacity: 0.7;
                 transition: opacity 0.3s ease;
             }
 
-            .timeline-item:hover .timeline-hint,
             .timeline-item.expanded .timeline-hint {
                 opacity: 0;
             }
@@ -520,14 +609,13 @@
                 opacity: 0;
                 overflow: hidden;
                 margin-top: 0;
-                font-size: 0.72rem;
-                line-height: 1.6;
+                font-size: 0.8rem;
+                line-height: 1.65;
                 color: var(--fg);
                 letter-spacing: normal;
                 transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
             }
 
-            .timeline-item:hover .timeline-details,
             .timeline-item.expanded .timeline-details {
                 max-height: 480px;
                 opacity: 1;
@@ -550,54 +638,105 @@
         </div>
         <div class="home">
             <div class="home-shell">
-                <aside class="corner-profile">
+                <header class="home-header">
                     <div class="profile-photo">
                         <!-- Coloque o arquivo "foto.jpg" na mesma pasta do index.html -->
                         <img src="foto.jpeg" alt="Foto de Yuri Nemeth">
                     </div>
-                    <div class="corner-id">
-                        <div class="home-name">YURI NEMETH</div>
-                        <div class="home-role">Dados &middot; TI &middot; Sistemas</div>
-                    </div>
-                </aside>
+                    <div class="home-name">YURI NEMETH</div>
+                    <div class="home-role">Dados &middot; TI &middot; Sistemas</div>
+                </header>
 
-                <main class="home-main">
-                    <section class="bio">
+                <section class="bio">
+                    <p>
+                        Meu interesse por tecnologia nasceu da curiosidade — pela astronomia, pela engenharia aeroespacial e pela lógica por trás de um bom problema matemático. Sou enxadrista nas horas vagas, músico com apresentações públicas pela minha cidade, e atualmente canalizo essa mesma curiosidade construindo um jogo de estratégia espacial inspirado em Ender's Game, que é um aclamado romance de ficção científica militar escrito por Orson Scott Card, publicado em 1985, e mesclando histórias reais da nossa astronomia, como o sobrevoo da Voyager 2 por Netuno. Acredito que dados, sistemas e boas histórias têm mais em comum do que parecem, acredito que elas se complementam e são interdependentes. Um dado leva consigo a história que, lida corretamente, pinta um sistema — e é essa interseção que me trouxe até aqui.
+                    </p>
+                </section>
+
+                <section class="row-section">
+                    <h2 class="timeline-heading">Experiência Profissional</h2>
+                    <div class="timeline-row" id="timeline-experience"></div>
+                </section>
+
+                <section class="row-section">
+                    <h2 class="timeline-heading">Formação</h2>
+                    <div class="timeline-row" id="timeline-education"></div>
+                </section>
+
+                <section class="row-section project-slide">
+                    <div class="project-feature">
+                        <div class="project-title">ERNEMETH-RTS</div>
+                        <div class="project-tagline">Projeto em destaque &middot; RTS / Tower Defense espacial &middot; Unity &middot; GPL-3.0</div>
                         <p>
-                            Meu interesse por tecnologia nasceu da curiosidade — pela astronomia, pela engenharia aeroespacial e pela lógica por trás de um bom problema matemático. Sou enxadrista nas horas vagas, músico com apresentações públicas pela minha cidade, e atualmente canalizo essa mesma curiosidade construindo um jogo de estratégia espacial inspirado em Ender's Game, que é um aclamado romance de ficção científica militar escrito por Orson Scott Card, publicado em 1985, e mesclando histórias reais da nossa astronomia, como o sobrevoo da Voyager 2 por Netuno. Acredito que dados, sistemas e boas histórias têm mais em comum do que parecem, acredito que elas se complementam e são interdependentes. Um dado leva consigo a história que, lida corretamente, pinta um sistema — e é essa interseção que me trouxe até aqui.
+                            Jogo de estratégia espacial em desenvolvimento, ancorado no sobrevoo real da Voyager 2 por Netuno em agosto de 1989: telescópios detectam um objeto anômalo, um satélite não-tripulado é enviado para escaneá-lo, e o próprio escaneamento — não hostilidade — dispara a reação de um enxame alienígena.
                         </p>
-                    </section>
 
-                    <section class="row-section">
-                        <h2 class="timeline-heading">Experiência Profissional</h2>
-                        <div class="timeline-row" id="timeline-experience"></div>
-                    </section>
-
-                    <section class="row-section">
-                        <h2 class="timeline-heading">Formação</h2>
-                        <div class="timeline-row" id="timeline-education"></div>
-                    </section>
-
-                    <section class="row-section">
-                        <h2 class="timeline-heading">Projeto em Destaque</h2>
-                        <div class="project-feature">
-                            <div class="project-title">ERNEMETH-RTS</div>
-                            <div class="project-tagline">RTS / Tower Defense espacial &middot; Unity &middot; GPL-3.0</div>
-                            <p>
-                                Jogo de estratégia espacial em desenvolvimento, ancorado no sobrevoo real da Voyager 2 por Netuno em agosto de 1989: telescópios detectam um objeto anômalo, um satélite não-tripulado é enviado para escaneá-lo e o próprio escaneamento — não hostilidade — dispara a reação de um enxame alienígena. A lore dos inimigos segue um comportamento de formigueiro real (stigmergy, via campo de feromônio compartilhado), não um bando coeso — decisão consciente contra o padrão clássico de Boids. O Sistema Solar já roda com órbitas, escalas e câmera de zoom baseadas em dados reais dos planetas, construído antes de qualquer sistema de jogabilidade.
-                            </p>
-                            <div class="project-tags">
-                                <span>Unity (2D/2.5D)</span>
-                                <span>C#</span>
-                                <span>GPL-3.0</span>
-                                <span>Mecânica de enxame</span>
-                                <span>Sistema Solar real</span>
+                        <div class="project-topics">
+                            <div class="project-topic">
+                                <h3>Premissa</h3>
+                                <p>Satélite comprometido envia dados parciais; uma nave tripulada é enviada para recuperar o resto numa missão essencialmente suicida, sem armas — o objetivo é só extrair e transmitir dados antes do fim, numa cápsula enviada à velocidade da Parker Solar Probe (~692.000 km/h).</p>
                             </div>
-                            <!-- Trocar "#" pelo link do repositório público assim que estiver pronto para divulgação -->
-                            <a class="project-link" href="#">Ver repositório</a>
+                            <div class="project-topic">
+                                <h3>Lore do enxame</h3>
+                                <p>Rainhas produzem e compartilham feromônio, enxames se subdividem, unidades reagem a um campo compartilhado — comportamento de formigueiro real (stigmergy), não Boids: a coesão de cardume foi descartada em favor do caos individual dentro de um direcionamento coletivo.</p>
+                            </div>
+                            <div class="project-topic">
+                                <h3>Arquitetura</h3>
+                                <p>O Sistema Solar (relógio de jogo, órbitas, escalas, câmera de zoom exponencial) foi construído com dados reais dos planetas antes de qualquer sistema de jogabilidade — a interface de lançamento do satélite depende de mostrar posições sobre ele.</p>
+                            </div>
+                            <div class="project-topic">
+                                <h3>Distribuição</h3>
+                                <p>Licença GPL-3.0, mesmo modelo do Mindustry: código aberto no GitHub, venda na Steam, grátis no itch.io com opção de doação.</p>
+                            </div>
                         </div>
-                    </section>
-                </main>
+
+                        <div class="project-tags">
+                            <span>Unity (2D/2.5D)</span>
+                            <span>C#</span>
+                            <span>GPL-3.0</span>
+                            <span>Mecânica de enxame</span>
+                            <span>Sistema Solar real</span>
+                        </div>
+                        <!-- Trocar "#" pelo link do repositório público assim que estiver pronto para divulgação -->
+                        <a class="project-link" href="#">Ver repositório</a>
+                    </div>
+
+                    <!-- Sol no canto direito, cortado ao meio pela borda do próprio SVG.
+                         Órbitas e período de rotação são só ilustrativos, não os dados
+                         reais do jogo (esses vivem no projeto do jogo em si). -->
+                    <div class="solar-visual" aria-hidden="true">
+                        <svg viewBox="0 0 500 500">
+                            <circle class="orbit-line" cx="500" cy="250" r="60" />
+                            <circle class="orbit-line" cx="500" cy="250" r="105" />
+                            <circle class="orbit-line" cx="500" cy="250" r="155" />
+                            <circle class="orbit-line" cx="500" cy="250" r="210" />
+                            <circle class="orbit-line" cx="500" cy="250" r="270" />
+
+                            <circle class="sun" cx="500" cy="250" r="32" />
+
+                            <g>
+                                <circle class="planet" cx="560" cy="250" r="2.6" />
+                                <animateTransform attributeName="transform" type="rotate" from="30 500 250" to="390 500 250" dur="9s" repeatCount="indefinite" />
+                            </g>
+                            <g>
+                                <circle class="planet" cx="605" cy="250" r="3.4" />
+                                <animateTransform attributeName="transform" type="rotate" from="190 500 250" to="550 500 250" dur="15s" repeatCount="indefinite" />
+                            </g>
+                            <g>
+                                <circle class="planet" cx="655" cy="250" r="3" />
+                                <animateTransform attributeName="transform" type="rotate" from="70 500 250" to="430 500 250" dur="21s" repeatCount="indefinite" />
+                            </g>
+                            <g>
+                                <circle class="planet" cx="710" cy="250" r="4.2" />
+                                <animateTransform attributeName="transform" type="rotate" from="260 500 250" to="620 500 250" dur="29s" repeatCount="indefinite" />
+                            </g>
+                            <g>
+                                <circle class="planet" cx="770" cy="250" r="3.8" />
+                                <animateTransform attributeName="transform" type="rotate" from="120 500 250" to="480 500 250" dur="38s" repeatCount="indefinite" />
+                            </g>
+                        </svg>
+                    </div>
+                </section>
             </div>
         </div>
         <script>
@@ -908,13 +1047,25 @@
                     if (item.desc) html += '<div class="timeline-desc">' + item.desc + '</div>';
                     if (item.tag) html += '<div class="timeline-tag">' + item.tag + '</div>';
                     html += '<div class="timeline-details">' + (item.details || '') + '</div>';
-                    if (item.details) html += '<div class="timeline-hint">passe o mouse • detalhes</div>';
+                    if (item.details) html += '<div class="timeline-hint">clique • detalhes</div>';
 
                     el.innerHTML = html;
 
-                    // Mobile não tem hover — o toque alterna a classe "expanded"
+                    // Clique abre SÓ esse card — fecha qualquer outro já aberto
+                    // na mesma faixa, e a faixa ganha .has-expanded pra apagar
+                    // um pouco os vizinhos (o mesmo efeito de foco da Netflix).
                     el.addEventListener('click', function () {
-                        el.classList.toggle('expanded');
+                        const wasExpanded = el.classList.contains('expanded');
+
+                        container.querySelectorAll('.timeline-item.expanded').forEach(function (item) {
+                            item.classList.remove('expanded');
+                        });
+
+                        if (!wasExpanded) {
+                            el.classList.add('expanded');
+                        }
+
+                        container.classList.toggle('has-expanded', !wasExpanded);
                     });
 
                     container.appendChild(el);
