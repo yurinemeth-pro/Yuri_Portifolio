@@ -299,6 +299,10 @@
                 margin-top: 4rem;
             }
 
+            .row-section--tight {
+                margin-top: 2.25rem;
+            }
+
             @media (max-width: 640px) {
                 .home-shell {
                     padding: 6rem 1.25rem 3rem;
@@ -618,10 +622,10 @@
             .solar-visual {
                 position: absolute;
                 top: 50%;
-                right: -9vw;
+                right: -3vw;
                 transform: translateY(-50%);
-                width: min(62vw, 980px);
-                height: min(62vw, 980px);
+                width: min(58vw, 900px);
+                height: min(58vw, 900px);
                 pointer-events: none;
                 z-index: 1;
             }
@@ -658,8 +662,8 @@
             /* ---- Física & Matemática aplicadas: fórmulas reais usadas no site/jogo ---- */
             .formulas-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-                gap: 1.5rem;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 2rem;
             }
 
             .formula-card {
@@ -683,11 +687,52 @@
                 letter-spacing: normal;
             }
 
+            /* ---- Demonstrações interativas (trig / período / easing) ---- */
+            .formula-demo-body {
+                display: flex;
+                align-items: center;
+                gap: 1.25rem;
+                margin-top: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .formula-demo-visual svg {
+                display: block;
+                overflow: visible;
+            }
+
+            .formula-demo-controls {
+                flex: 1 1 160px;
+                min-width: 160px;
+            }
+
+            .formula-demo-controls label {
+                display: block;
+                font-size: 0.7rem;
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin-bottom: 0.5rem;
+            }
+
+            .formula-demo-controls input[type="range"] {
+                width: 100%;
+                accent-color: var(--accent);
+                background: transparent;
+            }
+
+            .formula-demo-readout {
+                font-size: 0.78rem;
+                color: var(--accent);
+                margin-top: 0.6rem;
+                letter-spacing: 0.02em;
+            }
+
             /* ---- Sobre & Interesses ---- */
             .about-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 2.5rem;
+                display: flex;
+                flex-direction: column;
+                gap: 3.25rem;
                 margin-top: 0.5rem;
             }
 
@@ -707,6 +752,10 @@
                 letter-spacing: normal;
             }
 
+            .about-block > p:first-of-type {
+                max-width: 74ch;
+            }
+
             .interest-tags {
                 display: flex;
                 flex-wrap: wrap;
@@ -722,6 +771,124 @@
                 border-radius: 2px;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
+            }
+
+            /* ---- Xadrez: tabuleiro gerado via JS (8×8, sem imagem externa) ---- */
+            .chess-section {
+                display: flex;
+                gap: 2.5rem;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                margin-top: 1rem;
+            }
+
+            .chess-board {
+                display: grid;
+                grid-template-columns: repeat(8, 1fr);
+                grid-template-rows: repeat(8, 1fr);
+                width: min(100%, 320px);
+                aspect-ratio: 1 / 1;
+                border: 1px solid var(--dim);
+                flex-shrink: 0;
+            }
+
+            .chess-square.dark {
+                background: rgba(109, 227, 201, 0.12);
+            }
+
+            .chess-info {
+                flex: 1 1 260px;
+                min-width: 240px;
+            }
+
+            .chess-info p {
+                font-size: 0.85rem;
+                line-height: 1.75;
+                color: var(--muted);
+                margin-top: 0.6rem;
+                letter-spacing: normal;
+            }
+
+            .chess-info p strong {
+                color: var(--fg);
+                font-weight: 400;
+            }
+
+            .chess-username-field {
+                margin-top: 1rem;
+                font-size: 0.75rem;
+                color: var(--dim);
+            }
+
+            .chess-username-field code {
+                color: var(--accent);
+                border: 1px dashed var(--dim);
+                padding: 0.15rem 0.5rem;
+                border-radius: 2px;
+            }
+
+            /* ---- Baixo / ondas sonoras ---- */
+            .wave-demo {
+                margin-top: 1rem;
+            }
+
+            .wave-demo svg {
+                width: 100%;
+                max-width: 560px;
+                height: auto;
+                display: block;
+            }
+
+            .wave-line {
+                fill: none;
+                stroke-width: 1.6;
+            }
+
+            .wave-guitar { stroke: var(--accent-blue); }
+            .wave-violao { stroke: var(--accent); }
+            .wave-baixo { stroke: var(--fg); }
+
+            .wave-legend {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1.5rem;
+                margin-top: 1rem;
+                font-size: 0.78rem;
+                color: var(--muted);
+                letter-spacing: normal;
+            }
+
+            .wave-legend .dot {
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                margin-right: 0.4rem;
+            }
+
+            .wave-legend .dot-guitar { background: var(--accent-blue); }
+            .wave-legend .dot-violao { background: var(--accent); }
+            .wave-legend .dot-baixo { background: var(--fg); }
+
+            /* ---- Certificado ETEC ---- */
+            .certificate-block {
+                margin-top: 1.5rem;
+            }
+
+            .certificate-block img {
+                display: block;
+                max-width: 100%;
+                width: 420px;
+                border: 1px solid var(--dim);
+                border-radius: 4px;
+            }
+
+            .certificate-caption {
+                font-size: 0.68rem;
+                color: var(--dim);
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                margin-top: 0.5rem;
             }
 
             /* ---- Contato ---- */
@@ -849,7 +1016,7 @@
                     <div class="timeline-row" id="timeline-experience"></div>
                 </section>
 
-                <section class="row-section">
+                <section class="row-section row-section--tight">
                     <h2 class="timeline-heading">Formação</h2>
                     <div class="timeline-row" id="timeline-education"></div>
                 </section>
@@ -892,65 +1059,68 @@
                         <a class="project-link" href="#">Ver repositório</a>
                     </div>
 
-                    <!-- Sol e órbitas: o centro fica exatamente na borda direita do
-                         viewBox do SVG, então metade dele já nasce fora da área
-                         desenhável e é cortada pelo próprio SVG — sem overflow/clip-path
-                         por fora. 8 órbitas (Mercúrio a Netuno) + Sol, espaçamento
-                         progressivo, tamanhos com hierarquia bem marcada (não é escala
-                         real). Período de rotação ilustrativo: órbitas internas giram
-                         mais rápido que as externas, um aceno à 3ª Lei de Kepler. -->
+                    <!-- Sol e órbitas centralizados no próprio viewBox — nada é cortado
+                         "na mão" aqui dentro do SVG, os círculos nascem inteiros. Quem
+                         corta uma fatia é o posicionamento do .solar-visual (grande e
+                         puxado pra direita): o que sobra além da seção some pelo
+                         overflow:hidden do .project-slide, naturalmente, como cortar
+                         uma foto grande demais pra moldura — não o inverso. 8 órbitas
+                         (Mercúrio a Netuno) + Sol, espaçamento progressivo, tamanhos
+                         com hierarquia bem marcada (não é escala real). Período de
+                         rotação ilustrativo: órbitas internas giram mais rápido que as
+                         externas, um aceno à 3ª Lei de Kepler. -->
                     <div class="solar-visual" aria-hidden="true">
-                        <svg viewBox="0 0 820 820">
-                            <circle class="orbit-line" cx="820" cy="410" r="55" />
-                            <circle class="orbit-line" cx="820" cy="410" r="95" />
-                            <circle class="orbit-line" cx="820" cy="410" r="138" />
-                            <circle class="orbit-line" cx="820" cy="410" r="184" />
-                            <circle class="orbit-line" cx="820" cy="410" r="232" />
-                            <circle class="orbit-line" cx="820" cy="410" r="283" />
-                            <circle class="orbit-line" cx="820" cy="410" r="337" />
-                            <circle class="orbit-line" cx="820" cy="410" r="393" />
+                        <svg viewBox="0 0 700 700">
+                            <circle class="orbit-line" cx="350" cy="350" r="42" />
+                            <circle class="orbit-line" cx="350" cy="350" r="74" />
+                            <circle class="orbit-line" cx="350" cy="350" r="108" />
+                            <circle class="orbit-line" cx="350" cy="350" r="144" />
+                            <circle class="orbit-line" cx="350" cy="350" r="182" />
+                            <circle class="orbit-line" cx="350" cy="350" r="222" />
+                            <circle class="orbit-line" cx="350" cy="350" r="264" />
+                            <circle class="orbit-line" cx="350" cy="350" r="308" />
 
-                            <circle class="sun" cx="820" cy="410" r="48" />
+                            <circle class="sun" cx="350" cy="350" r="40" />
 
                             <!-- Mercúrio -->
                             <g>
-                                <circle class="planet" cx="875" cy="410" r="2.4" />
-                                <animateTransform attributeName="transform" type="rotate" from="10 820 410" to="370 820 410" dur="7s" repeatCount="indefinite" />
+                                <circle class="planet" cx="392" cy="350" r="2.4" />
+                                <animateTransform attributeName="transform" type="rotate" from="10 350 350" to="370 350 350" dur="7s" repeatCount="indefinite" />
                             </g>
                             <!-- Vênus -->
                             <g>
-                                <circle class="planet" cx="915" cy="410" r="4.4" />
-                                <animateTransform attributeName="transform" type="rotate" from="160 820 410" to="520 820 410" dur="11s" repeatCount="indefinite" />
+                                <circle class="planet" cx="424" cy="350" r="4.2" />
+                                <animateTransform attributeName="transform" type="rotate" from="160 350 350" to="520 350 350" dur="11s" repeatCount="indefinite" />
                             </g>
                             <!-- Terra -->
                             <g>
-                                <circle class="planet" cx="958" cy="410" r="4.6" />
-                                <animateTransform attributeName="transform" type="rotate" from="260 820 410" to="620 820 410" dur="15s" repeatCount="indefinite" />
+                                <circle class="planet" cx="458" cy="350" r="4.4" />
+                                <animateTransform attributeName="transform" type="rotate" from="260 350 350" to="620 350 350" dur="15s" repeatCount="indefinite" />
                             </g>
                             <!-- Marte -->
                             <g>
-                                <circle class="planet" cx="1004" cy="410" r="3.2" />
-                                <animateTransform attributeName="transform" type="rotate" from="60 820 410" to="420 820 410" dur="20s" repeatCount="indefinite" />
+                                <circle class="planet" cx="494" cy="350" r="3" />
+                                <animateTransform attributeName="transform" type="rotate" from="60 350 350" to="420 350 350" dur="20s" repeatCount="indefinite" />
                             </g>
                             <!-- Júpiter -->
                             <g>
-                                <circle class="planet" cx="1052" cy="410" r="12" />
-                                <animateTransform attributeName="transform" type="rotate" from="320 820 410" to="680 820 410" dur="28s" repeatCount="indefinite" />
+                                <circle class="planet" cx="532" cy="350" r="12" />
+                                <animateTransform attributeName="transform" type="rotate" from="320 350 350" to="680 350 350" dur="28s" repeatCount="indefinite" />
                             </g>
                             <!-- Saturno -->
                             <g>
-                                <circle class="planet" cx="1103" cy="410" r="10" />
-                                <animateTransform attributeName="transform" type="rotate" from="130 820 410" to="490 820 410" dur="37s" repeatCount="indefinite" />
+                                <circle class="planet" cx="572" cy="350" r="10" />
+                                <animateTransform attributeName="transform" type="rotate" from="130 350 350" to="490 350 350" dur="37s" repeatCount="indefinite" />
                             </g>
                             <!-- Urano -->
                             <g>
-                                <circle class="planet" cx="1157" cy="410" r="6.5" />
-                                <animateTransform attributeName="transform" type="rotate" from="200 820 410" to="560 820 410" dur="48s" repeatCount="indefinite" />
+                                <circle class="planet" cx="614" cy="350" r="6.3" />
+                                <animateTransform attributeName="transform" type="rotate" from="200 350 350" to="560 350 350" dur="48s" repeatCount="indefinite" />
                             </g>
                             <!-- Netuno -->
                             <g>
-                                <circle class="planet" cx="1213" cy="410" r="6.2" />
-                                <animateTransform attributeName="transform" type="rotate" from="40 820 410" to="400 820 410" dur="60s" repeatCount="indefinite" />
+                                <circle class="planet" cx="658" cy="350" r="6" />
+                                <animateTransform attributeName="transform" type="rotate" from="40 350 350" to="400 350 350" dur="60s" repeatCount="indefinite" />
                             </g>
                         </svg>
                     </div>
