@@ -15,6 +15,9 @@
                    um fundo quase preto — mantido só pra linhas/bordas finas.
                    --muted é o tom pra textos secundários (datas, orgs, legendas). */
                 --muted: #8fa8a2;
+                /* Toque de azul, discreto, pro header/nav — a paleta original já
+                   é verde-azulada (--accent), isso só reforça o "azul" pedido. */
+                --accent-blue: #7db3e8;
             }
 
             * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -154,6 +157,73 @@
                 font-size: 16px;
             }
 
+            /* ===== Header fixo / navegação ===== */
+            .site-nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 20;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1.1rem 3rem;
+                background: rgba(5, 7, 10, 0.82);
+                backdrop-filter: blur(6px);
+                border-bottom: 1px solid var(--dim);
+            }
+
+            .site-nav-brand {
+                font-size: 0.85rem;
+                letter-spacing: 0.3em;
+                color: var(--accent);
+                text-decoration: none;
+            }
+
+            .site-nav-links {
+                display: flex;
+                gap: 2.25rem;
+            }
+
+            .site-nav-links a {
+                font-size: 0.68rem;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: var(--muted);
+                text-decoration: none;
+                padding-bottom: 0.3rem;
+                border-bottom: 1px solid transparent;
+                transition: color 0.25s ease, border-color 0.25s ease;
+            }
+
+            .site-nav-links a:hover {
+                color: var(--accent-blue);
+                border-color: var(--accent-blue);
+            }
+
+            @media (max-width: 640px) {
+                .site-nav {
+                    padding: 0.9rem 1.25rem;
+                }
+                .site-nav-links {
+                    gap: 1rem;
+                }
+                .site-nav-links a {
+                    font-size: 0.6rem;
+                    letter-spacing: 0.1em;
+                }
+            }
+
+            /* Seções-alvo dos links do menu: compensa a altura do header fixo
+               pra não ficarem escondidas atrás dele ao navegar pela âncora. */
+            #inicio, #projetos, #sobre, #contato {
+                scroll-margin-top: 5.5rem;
+            }
+
+            .home-shell {
+                scroll-behavior: smooth;
+            }
+
             /* ===== Barra de rolamento customizada =====
                Substitui a barra branca padrão do navegador por algo alinhado
                à paleta (dim/accent, fina, sem invadir o design).
@@ -194,7 +264,7 @@
             .home-shell {
                 height: 100%;
                 overflow-y: auto;
-                padding: 3.5rem 3rem 4rem;
+                padding: 7rem 3rem 4rem;
             }
 
             .home-header {
@@ -204,23 +274,23 @@
                 text-align: center;
                 max-width: 720px;
                 margin: 0 auto 3rem;
-                gap: 1rem;
+                gap: 1.1rem;
             }
 
             .home-header .profile-photo {
-                width: 112px;
-                height: 112px;
+                width: 160px;
+                height: 160px;
             }
 
             .bio {
-                max-width: 760px;
+                max-width: 980px;
                 margin: 0 auto;
                 text-align: center;
             }
 
             .bio p {
-                font-size: 0.95rem;
-                line-height: 1.85;
+                font-size: 1.05rem;
+                line-height: 1.9;
                 color: var(--fg);
                 letter-spacing: normal;
             }
@@ -231,7 +301,7 @@
 
             @media (max-width: 640px) {
                 .home-shell {
-                    padding: 3rem 1.25rem 3rem;
+                    padding: 6rem 1.25rem 3rem;
                 }
             }
 
@@ -314,14 +384,14 @@
             }
 
             .home-name {
-                font-size: 1.5rem;
-                letter-spacing: 0.3em;
+                font-size: 2.1rem;
+                letter-spacing: 0.28em;
                 color: var(--accent);
                 text-shadow: 0 0 15px rgba(109, 227, 201, 0.3);
             }
 
             .home-role {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
                 color: var(--muted);
                 letter-spacing: 0.2em;
                 text-transform: uppercase;
@@ -351,8 +421,8 @@
 
             .timeline-item {
                 position: relative;
-                flex: 0 0 280px;
-                padding: 1.2rem 1.35rem;
+                flex: 0 0 420px;
+                padding: 1.15rem 1.6rem;
                 border: 1px solid transparent;
                 border-radius: 4px;
                 background: rgba(109, 227, 201, 0.025);
@@ -417,20 +487,20 @@
             }
 
             .timeline-title {
-                font-size: 1.15rem;
+                font-size: 1.25rem;
                 color: var(--fg);
                 margin-top: 0.35rem;
                 letter-spacing: 0.03em;
             }
 
             .timeline-org {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
                 color: var(--accent);
                 margin-top: 0.2rem;
             }
 
             .timeline-desc {
-                font-size: 0.85rem;
+                font-size: 0.88rem;
                 color: var(--muted);
                 line-height: 1.55;
                 margin-top: 0.6rem;
@@ -440,7 +510,7 @@
             /* ---- Projeto em destaque: ERNEMETH-RTS, ocupa um "slide" cheio ---- */
             .project-slide {
                 position: relative;
-                min-height: 82vh;
+                min-height: 88vh;
                 display: flex;
                 align-items: center;
                 overflow: hidden;
@@ -451,17 +521,17 @@
             .project-feature {
                 position: relative;
                 z-index: 2;
-                max-width: 640px;
+                max-width: 54%;
             }
 
             .project-feature .project-title {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
                 color: var(--accent);
                 letter-spacing: 0.06em;
             }
 
             .project-feature .project-tagline {
-                font-size: 0.78rem;
+                font-size: 0.8rem;
                 color: var(--muted);
                 text-transform: uppercase;
                 letter-spacing: 0.15em;
@@ -469,8 +539,8 @@
             }
 
             .project-feature > p {
-                font-size: 0.92rem;
-                line-height: 1.8;
+                font-size: 0.95rem;
+                line-height: 1.85;
                 color: var(--fg);
                 letter-spacing: normal;
                 margin-top: 1.25rem;
@@ -479,11 +549,11 @@
             .project-topics {
                 margin-top: 2rem;
                 display: grid;
-                gap: 1.5rem;
+                gap: 1.6rem;
             }
 
             .project-topic h3 {
-                font-size: 0.75rem;
+                font-size: 0.78rem;
                 color: var(--accent);
                 text-transform: uppercase;
                 letter-spacing: 0.15em;
@@ -491,11 +561,17 @@
             }
 
             .project-topic p {
-                font-size: 0.85rem;
-                line-height: 1.7;
+                font-size: 0.88rem;
+                line-height: 1.75;
                 color: var(--muted);
                 letter-spacing: normal;
                 margin-top: 0.45rem;
+            }
+
+            @media (max-width: 860px) {
+                .project-feature {
+                    max-width: 100%;
+                }
             }
 
             .project-feature .project-tags {
@@ -542,10 +618,10 @@
             .solar-visual {
                 position: absolute;
                 top: 50%;
-                right: -4rem;
+                right: -9vw;
                 transform: translateY(-50%);
-                width: min(46vw, 620px);
-                height: min(46vw, 620px);
+                width: min(62vw, 980px);
+                height: min(62vw, 980px);
                 pointer-events: none;
                 z-index: 1;
             }
@@ -577,6 +653,112 @@
                 .solar-visual {
                     opacity: 0.35;
                 }
+            }
+
+            /* ---- Física & Matemática aplicadas: fórmulas reais usadas no site/jogo ---- */
+            .formulas-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .formula-card {
+                border-left: 2px solid var(--dim);
+                padding-left: 1rem;
+            }
+
+            .formula-card code {
+                display: block;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 0.95rem;
+                color: var(--accent);
+                letter-spacing: 0.02em;
+            }
+
+            .formula-card p {
+                font-size: 0.82rem;
+                line-height: 1.6;
+                color: var(--muted);
+                margin-top: 0.5rem;
+                letter-spacing: normal;
+            }
+
+            /* ---- Sobre & Interesses ---- */
+            .about-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 2.5rem;
+                margin-top: 0.5rem;
+            }
+
+            .about-block h3 {
+                font-size: 0.85rem;
+                color: var(--accent);
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                font-weight: 400;
+            }
+
+            .about-block p {
+                font-size: 0.9rem;
+                line-height: 1.8;
+                color: var(--fg);
+                margin-top: 0.75rem;
+                letter-spacing: normal;
+            }
+
+            .interest-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 0.9rem;
+            }
+
+            .interest-tags span {
+                font-size: 0.68rem;
+                color: var(--muted);
+                border: 1px solid var(--dim);
+                padding: 0.2rem 0.6rem;
+                border-radius: 2px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+
+            /* ---- Contato ---- */
+            .contact-links {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1.5rem 2.5rem;
+                margin-top: 0.5rem;
+            }
+
+            .contact-links a {
+                font-size: 0.85rem;
+                letter-spacing: 0.05em;
+                color: var(--fg);
+                text-decoration: none;
+                border-bottom: 1px solid var(--dim);
+                padding-bottom: 0.2rem;
+                transition: color 0.25s ease, border-color 0.25s ease;
+            }
+
+            .contact-links a:hover {
+                color: var(--accent);
+                border-color: var(--accent);
+            }
+
+            .contact-links .contact-label {
+                color: var(--muted);
+                text-transform: uppercase;
+                font-size: 0.65rem;
+                letter-spacing: 0.15em;
+                display: block;
+                margin-bottom: 0.3rem;
+            }
+
+            .contact-item {
+                display: flex;
+                flex-direction: column;
             }
 
             .timeline-tag {
@@ -637,8 +819,17 @@
             </h1> 
         </div>
         <div class="home">
+            <nav class="site-nav">
+                <a class="site-nav-brand" href="#inicio">YN</a>
+                <div class="site-nav-links">
+                    <a href="#inicio">Início</a>
+                    <a href="#projetos">Projetos</a>
+                    <a href="#sobre">Sobre</a>
+                    <a href="#contato">Contato</a>
+                </div>
+            </nav>
             <div class="home-shell">
-                <header class="home-header">
+                <header class="home-header" id="inicio">
                     <div class="profile-photo">
                         <!-- Coloque o arquivo "foto.jpg" na mesma pasta do index.html -->
                         <img src="foto.jpeg" alt="Foto de Yuri Nemeth">
@@ -663,30 +854,30 @@
                     <div class="timeline-row" id="timeline-education"></div>
                 </section>
 
-                <section class="row-section project-slide">
+                <section class="row-section project-slide" id="projetos">
                     <div class="project-feature">
                         <div class="project-title">ERNEMETH-RTS</div>
-                        <div class="project-tagline">Projeto em destaque &middot; RTS / Tower Defense espacial &middot; Unity &middot; GPL-3.0</div>
+                        <div class="project-tagline">Projeto em destaque &middot; RTS espacial 2D top-down &middot; Unity &middot; GPL-3.0</div>
                         <p>
-                            Jogo de estratégia espacial em desenvolvimento, ancorado no sobrevoo real da Voyager 2 por Netuno em agosto de 1989: telescópios detectam um objeto anômalo, um satélite não-tripulado é enviado para escaneá-lo, e o próprio escaneamento — não hostilidade — dispara a reação de um enxame alienígena.
+                            ERNEMETH-RTS é um RTS (Real-Time Strategy) de estratégia espacial, com perspectiva 2D top-down (visão de cima, tipo mapa tático) e jogabilidade em tempo real — não em turnos. Ela combina estratégia, logística, produção de recursos e operações espaciais: gerenciar frotas, escanear ameaças e decidir sob pressão, com o Sistema Solar real servindo de tabuleiro. A premissa é inspirada em Ender's Game (romance de Orson Scott Card, 1985): uma espécie alienígena reage com hostilidade ao primeiro contato tecnológico humano, e a humanidade precisa decidir como responder a uma ameaça que ela mesma, sem querer, provocou.
                         </p>
 
                         <div class="project-topics">
                             <div class="project-topic">
                                 <h3>Premissa</h3>
-                                <p>Satélite comprometido envia dados parciais; uma nave tripulada é enviada para recuperar o resto numa missão essencialmente suicida, sem armas — o objetivo é só extrair e transmitir dados antes do fim, numa cápsula enviada à velocidade da Parker Solar Probe (~692.000 km/h).</p>
+                                <p>Ancorado no sobrevoo real da Voyager 2 por Netuno, em agosto de 1989: telescópios detectam um objeto anômalo e um satélite não-tripulado é lançado (interface retrô, estilo sala de controle da Apollo) pra escaneá-lo. O próprio escaneamento — não hostilidade — é o gatilho da reação alienígena, a mesma lógica de formigas atraídas por corrente elétrica. O satélite é comprometido, mas envia dados parciais; uma nave tripulada — primeira jogabilidade de controle direto — parte numa missão essencialmente suicida, sem armas, só pra extrair e transmitir o resto dos dados antes do fim, numa cápsula lançada à velocidade da Parker Solar Probe (~692.000 km/h, o objeto mais rápido já construído pela humanidade).</p>
                             </div>
                             <div class="project-topic">
                                 <h3>Lore do enxame</h3>
-                                <p>Rainhas produzem e compartilham feromônio, enxames se subdividem, unidades reagem a um campo compartilhado — comportamento de formigueiro real (stigmergy), não Boids: a coesão de cardume foi descartada em favor do caos individual dentro de um direcionamento coletivo.</p>
+                                <p>Rainhas (múltiplas) produzem e compartilham uma trilha de feromônio; enxames se subdividem — não é uma nuvem única a maior parte do tempo; unidades individuais têm papéis (coletora, defensora, atacante-leve, tanque) e reagem a um campo de feromônio compartilhado, não a um alvo fixo. É comportamento de formigueiro real (stigmergy), decisão consciente contra o padrão clássico de Boids, que gera coesão de cardume — o oposto do caos individual buscado aqui. Sem Rainha por perto, unidades órfãs morrem.</p>
                             </div>
                             <div class="project-topic">
                                 <h3>Arquitetura</h3>
-                                <p>O Sistema Solar (relógio de jogo, órbitas, escalas, câmera de zoom exponencial) foi construído com dados reais dos planetas antes de qualquer sistema de jogabilidade — a interface de lançamento do satélite depende de mostrar posições sobre ele.</p>
+                                <p>O Sistema Solar — relógio de jogo com data real (começando em 25/08/1989), órbitas calculadas a partir de dados reais dos planetas, escalas ajustáveis e câmera de zoom exponencial — foi construído antes de qualquer sistema de jogabilidade, já que a interface de lançamento do satélite depende de mostrar posições sobre ele. A migração de engine (GameMaker → Unity) não herdou o histórico de commits antigo: o código velho serve só de referência de lógica, reescrito do zero.</p>
                             </div>
                             <div class="project-topic">
                                 <h3>Distribuição</h3>
-                                <p>Licença GPL-3.0, mesmo modelo do Mindustry: código aberto no GitHub, venda na Steam, grátis no itch.io com opção de doação.</p>
+                                <p>Licença GPL-3.0, mesmo modelo do Mindustry: protege o código-fonte de fechamento por terceiros sem impedir venda de builds compilados. Distribuição planejada como código aberto no GitHub, venda na Steam e grátis no itch.io com opção de doação — arte e assets podem ter copyright separado do código.</p>
                             </div>
                         </div>
 
@@ -701,40 +892,135 @@
                         <a class="project-link" href="#">Ver repositório</a>
                     </div>
 
-                    <!-- Sol no canto direito, cortado ao meio pela borda do próprio SVG.
-                         Órbitas e período de rotação são só ilustrativos, não os dados
-                         reais do jogo (esses vivem no projeto do jogo em si). -->
+                    <!-- Sol e órbitas: o centro fica exatamente na borda direita do
+                         viewBox do SVG, então metade dele já nasce fora da área
+                         desenhável e é cortada pelo próprio SVG — sem overflow/clip-path
+                         por fora. 8 órbitas (Mercúrio a Netuno) + Sol, espaçamento
+                         progressivo, tamanhos com hierarquia bem marcada (não é escala
+                         real). Período de rotação ilustrativo: órbitas internas giram
+                         mais rápido que as externas, um aceno à 3ª Lei de Kepler. -->
                     <div class="solar-visual" aria-hidden="true">
-                        <svg viewBox="0 0 500 500">
-                            <circle class="orbit-line" cx="500" cy="250" r="60" />
-                            <circle class="orbit-line" cx="500" cy="250" r="105" />
-                            <circle class="orbit-line" cx="500" cy="250" r="155" />
-                            <circle class="orbit-line" cx="500" cy="250" r="210" />
-                            <circle class="orbit-line" cx="500" cy="250" r="270" />
+                        <svg viewBox="0 0 820 820">
+                            <circle class="orbit-line" cx="820" cy="410" r="55" />
+                            <circle class="orbit-line" cx="820" cy="410" r="95" />
+                            <circle class="orbit-line" cx="820" cy="410" r="138" />
+                            <circle class="orbit-line" cx="820" cy="410" r="184" />
+                            <circle class="orbit-line" cx="820" cy="410" r="232" />
+                            <circle class="orbit-line" cx="820" cy="410" r="283" />
+                            <circle class="orbit-line" cx="820" cy="410" r="337" />
+                            <circle class="orbit-line" cx="820" cy="410" r="393" />
 
-                            <circle class="sun" cx="500" cy="250" r="32" />
+                            <circle class="sun" cx="820" cy="410" r="48" />
 
+                            <!-- Mercúrio -->
                             <g>
-                                <circle class="planet" cx="560" cy="250" r="2.6" />
-                                <animateTransform attributeName="transform" type="rotate" from="30 500 250" to="390 500 250" dur="9s" repeatCount="indefinite" />
+                                <circle class="planet" cx="875" cy="410" r="2.4" />
+                                <animateTransform attributeName="transform" type="rotate" from="10 820 410" to="370 820 410" dur="7s" repeatCount="indefinite" />
                             </g>
+                            <!-- Vênus -->
                             <g>
-                                <circle class="planet" cx="605" cy="250" r="3.4" />
-                                <animateTransform attributeName="transform" type="rotate" from="190 500 250" to="550 500 250" dur="15s" repeatCount="indefinite" />
+                                <circle class="planet" cx="915" cy="410" r="4.4" />
+                                <animateTransform attributeName="transform" type="rotate" from="160 820 410" to="520 820 410" dur="11s" repeatCount="indefinite" />
                             </g>
+                            <!-- Terra -->
                             <g>
-                                <circle class="planet" cx="655" cy="250" r="3" />
-                                <animateTransform attributeName="transform" type="rotate" from="70 500 250" to="430 500 250" dur="21s" repeatCount="indefinite" />
+                                <circle class="planet" cx="958" cy="410" r="4.6" />
+                                <animateTransform attributeName="transform" type="rotate" from="260 820 410" to="620 820 410" dur="15s" repeatCount="indefinite" />
                             </g>
+                            <!-- Marte -->
                             <g>
-                                <circle class="planet" cx="710" cy="250" r="4.2" />
-                                <animateTransform attributeName="transform" type="rotate" from="260 500 250" to="620 500 250" dur="29s" repeatCount="indefinite" />
+                                <circle class="planet" cx="1004" cy="410" r="3.2" />
+                                <animateTransform attributeName="transform" type="rotate" from="60 820 410" to="420 820 410" dur="20s" repeatCount="indefinite" />
                             </g>
+                            <!-- Júpiter -->
                             <g>
-                                <circle class="planet" cx="770" cy="250" r="3.8" />
-                                <animateTransform attributeName="transform" type="rotate" from="120 500 250" to="480 500 250" dur="38s" repeatCount="indefinite" />
+                                <circle class="planet" cx="1052" cy="410" r="12" />
+                                <animateTransform attributeName="transform" type="rotate" from="320 820 410" to="680 820 410" dur="28s" repeatCount="indefinite" />
+                            </g>
+                            <!-- Saturno -->
+                            <g>
+                                <circle class="planet" cx="1103" cy="410" r="10" />
+                                <animateTransform attributeName="transform" type="rotate" from="130 820 410" to="490 820 410" dur="37s" repeatCount="indefinite" />
+                            </g>
+                            <!-- Urano -->
+                            <g>
+                                <circle class="planet" cx="1157" cy="410" r="6.5" />
+                                <animateTransform attributeName="transform" type="rotate" from="200 820 410" to="560 820 410" dur="48s" repeatCount="indefinite" />
+                            </g>
+                            <!-- Netuno -->
+                            <g>
+                                <circle class="planet" cx="1213" cy="410" r="6.2" />
+                                <animateTransform attributeName="transform" type="rotate" from="40 820 410" to="400 820 410" dur="60s" repeatCount="indefinite" />
                             </g>
                         </svg>
+                    </div>
+                </section>
+
+                <section class="row-section">
+                    <h2 class="timeline-heading">Física &amp; Matemática Aplicadas</h2>
+                    <div class="formulas-grid">
+                        <div class="formula-card">
+                            <code>x = cx + r&middot;cos(&theta;)<br>y = cy + r&middot;sin(&theta;)</code>
+                            <p>Trigonometria: posiciona cada planeta sobre sua órbita circular — a mesma fórmula usada nos 400 pinos da string art da intro.</p>
+                        </div>
+                        <div class="formula-card">
+                            <code>&omega; = 360&deg; / T</code>
+                            <p>Velocidade angular constante: quanto maior o período T da órbita, mais devagar o planeta gira — um aceno (sem precisão real) à 3&ordf; Lei de Kepler.</p>
+                        </div>
+                        <div class="formula-card">
+                            <code>r = &radic;(largura&sup2; + altura&sup2;) / 2</code>
+                            <p>Teorema de Pitágoras: raio exato do círculo que revela a home no efeito "portal" da intro, cobrindo a tela inteira em qualquer proporção.</p>
+                        </div>
+                        <div class="formula-card">
+                            <code>f(t) = 2<sup>10t &minus; 10</sup></code>
+                            <p>Curva de easing exponencial: acelera o desenho das 5500 linhas da string art conforme a animação avança.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="row-section about-section" id="sobre">
+                    <h2 class="timeline-heading">Sobre &amp; Interesses</h2>
+                    <div class="about-grid">
+                        <div class="about-block">
+                            <h3>Além da tecnologia</h3>
+                            <p>Enxadrista nas horas vagas, apaixonado por astronomia e pela lógica por trás de um bom problema matemático, com interesse antigo em engenharia aeroespacial. Também sou músico — toco baixo elétrico e já me apresentei publicamente pela minha cidade.</p>
+                            <div class="interest-tags">
+                                <span>Xadrez</span>
+                                <span>Astronomia</span>
+                                <span>Matemática</span>
+                                <span>Engenharia Aeroespacial</span>
+                                <span>Baixo elétrico</span>
+                            </div>
+                        </div>
+                        <div class="about-block">
+                            <h3>Minha visão sobre Inteligência Artificial</h3>
+                            <!-- EDITAR: rascunho — ajuste pro seu tom antes de publicar -->
+                            <p>Uso IA (como o Claude) como multiplicador de produtividade no desenvolvimento — não como substituto de entendimento. O domínio técnico das decisões de arquitetura e design continua sendo meu: a IA acelera a execução, mas as escolhas de como um sistema deve se comportar, e por quê, precisam continuar sendo minhas pra eu realmente aprender com o processo.</p>
+                        </div>
+                        <div class="about-block">
+                            <h3>ETEC &amp; FATEC — o que ficou</h3>
+                            <!-- EDITAR: rascunho — ajuste pro seu tom antes de publicar -->
+                            <p>A ETEC foi onde consolidei matérias que já me eram familiares (matemática, lógica) com outras completamente novas (banco de dados, desenvolvimento web) — e o TCC premiado como melhor da área confirmou que eu tinha achado meu caminho. A FATEC aprofundou isso, mas pausei a matrícula pra me dedicar ao trabalho; o conhecimento não parou — só mudou de formato, entre cursos por fora e a prática diária em produção.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="row-section contact-section" id="contato">
+                    <h2 class="timeline-heading">Contato</h2>
+                    <div class="contact-links">
+                        <!-- EDITAR: troque pelos seus contatos reais -->
+                        <div class="contact-item">
+                            <span class="contact-label">E-mail</span>
+                            <a href="mailto:seuemail@exemplo.com">seuemail@exemplo.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">GitHub</span>
+                            <a href="#">github.com/seu-usuario</a>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">LinkedIn</span>
+                            <a href="#">linkedin.com/in/seu-perfil</a>
+                        </div>
                     </div>
                 </section>
             </div>
